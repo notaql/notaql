@@ -14,16 +14,20 @@ In this sample, we see a simple projection that provides the price and company f
 
 ##### Input
 
-| row-id | price | company | weight |
+| row-id | info  |         |        |
 |--------|-------|---------|--------|
+|        | price | company | weight |
 | plate  | 4     | WFM     | 110    |
+|        | price | company | weight |
 | knife  | 20    | Eikia   | 65     |
 
 ##### Output
 
-| row-id | price | company |
+| row-id |       |         |
 |--------|-------|---------|
+|        | price | company |
 | plate  | 4     | WFM     |
+|        | price | company |
 | knife  | 20    | Eikia   |
 
 ##### Transformation
@@ -82,16 +86,20 @@ In the following example we only consider items manufactured by "Eikia".
 
 ##### Input
 
-| row-id | price | company | weight |
+| row-id | info  |         |        |
 |--------|-------|---------|--------|
+|        | price | company | weight |
 | plate  | 4     | WFM     | 110    |
+|        | price | company | weight |
 | knife  | 20    | Eikia   | 65     |
 
 ##### Output
 
-| row-id | price | company |
+| row-id |       |         |
 |--------|-------|---------|
+|        | price | company |
 | plate  | 4     | WFM     |
+|        | price | company |
 | knife  | 20    | Eikia   |
 
 ##### Transformation
@@ -150,17 +158,22 @@ In this sample, we see a simple projection that provides the price and company f
 
 ##### Input
 
-| row-id | price | company |
+| row-id | info  |         |
 |--------|-------|---------|
+|        | price | company |
 | plate  | 4     | WFM     |
+|        | price | company |
 | knife  | 20    | Eikia   |
+|        | price | company |
 | table  | 480   | Eikia   |
 
 ##### Output
 
-| row-id | avg_price |
+| row-id |           |
 |--------|-----------|
+|        | avg_price |
 | WFM    | 4         |
+|        | avg_price |
 | Eikia  | 250       |
 
 ##### Transformation
