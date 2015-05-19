@@ -106,6 +106,10 @@ OUT.avg_views <- AVG(IN.info.views)
 
 There are many more example where NotaQL may be used. If you run into issues do not hesitate to contact us.
 
+### More Examples
+
+More examples can be found [here](EXAMPLES.md).
+
 ## Community
 
 Please use our IRC or mailing list for getting in touch on development and support.
@@ -122,7 +126,7 @@ This is the initial publication of the NotaQL framework for cross-system data tr
 ## About
 
 This project is a research prototype created at the
-Heterogeneous Information Systems Group at the Technical University of Kaiserslautern.
-The framework was written by [TomLottermann](https://github.com/TomLottermann) during his work for his master's thesis with [jschildgen](https://github.com/jschildgen) being his supervisor.
+[Heterogeneous Information Systems Group](http://wwwlgis.informatik.uni-kl.de/cms/his/) at the Technical University of Kaiserslautern.
+The framework was written by http://wwwlgis.informatik.uni-kl.de/cms/his/ during his work for his master's thesis with [jschildgen](https://github.com/jschildgen) being his supervisor.
 We open sourced it in order to allow new contributors to add new features, bug fixes, or simply
 use it for their own purposes.
