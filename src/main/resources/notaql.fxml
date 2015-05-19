@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  ~ Copyright 2015 by Thomas Lottermann
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notaql.gui.Controller">
+   <bottom>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="executeButton" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#execute" text="Execute" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </bottom>
+   <top>
+      <GridPane fx:id="engineGrid" BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ComboBox fx:id="inEngineComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#selectInEngine" prefWidth="150.0" promptText="Input Engine" />
+            <ComboBox fx:id="outEngineComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#selectOutEngine" prefWidth="150.0" promptText="Output Engine" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </top>
+   <center>
+      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="queryArea" prefHeight="200.0" prefWidth="200.0">
+               <font>
+                  <Font name="Monospaced Regular" size="26.0" />
+               </font>
+            </TextArea>
+            <ProgressIndicator fx:id="indicator" maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.5" visible="false" />
+         </children>
+      </StackPane>
+   </center>
+</BorderPane>
