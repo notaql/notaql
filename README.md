@@ -20,14 +20,14 @@ If for example our product catalog is stored in HBase, we might want to track pa
 At some point however you want to transfer the current state of the page impression counter back to HBase.
 The reason for that could be that this grants us to only have one database hit instead of two when loading a product page.
 
-Redis input:
+#### Redis input
 
 | Key   | Value |
 |-------|-------|
 | plate | 1100 |
 | table | 25000  |
 
-MongoDB output:
+#### MongoDB output
 
 ```JSON
 {
@@ -48,17 +48,19 @@ MongoDB output:
 }
 ```
 
-Transformation:
+#### Transformation
 
 ```
 OUT._id <- IN._k,
 OUT.info.company <- IN._v
 ```
 
+### Aggregation
+
 Other tasks may include aggregating data. For example we might be interested in the average number of views of products of the companies.
 Let's say the result shall be stored in Redis in order to have it available as fast as possible (e.g. for some machine learning algorithm for normalization).
 
-MongoDB input:
+#### MongoDB input
 
 ```JSON
 {
@@ -87,7 +89,7 @@ MongoDB input:
 }
 ```
 
-Redis output:
+#### Redis output
 
 | key | value |
 |-----|-------|
@@ -95,7 +97,7 @@ Redis output:
 | Eikia | 20000 |
 
 
-Transformation:
+#### Transformation
 
 ```
 OUT._k <- IN.info.company,
@@ -103,6 +105,13 @@ OUT._v <- AVG(IN.info.views)
 ```
 
 There are many more example where NotaQL may be used. If you run into issues do not hesitate to contact us.
+
+## Community
+
+Please use our IRC or mailing list for getting in touch on development and support.
+
+- #notaql on irc.freenode.net
+- [notaql@googlegroups.com](https://groups.google.com/d/forum/notaql)
 
 ## News
 
