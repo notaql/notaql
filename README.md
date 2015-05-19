@@ -58,7 +58,7 @@ OUT.info.company <- IN._v
 ### Aggregation
 
 Other tasks may include aggregating data. For example we might be interested in the average number of views of products of the companies.
-Let's say the result shall be stored in Redis in order to have it available as fast as possible (e.g. for some machine learning algorithm for normalization).
+Let's say the result shall be stored in HBase.
 
 #### MongoDB input
 
@@ -89,9 +89,9 @@ Let's say the result shall be stored in Redis in order to have it available as f
 }
 ```
 
-#### Redis output
+#### HBase output
 
-| key | value |
+| row | avg_views |
 |-----|-------|
 | WFM | 1100  |
 | Eikia | 20000 |
@@ -100,8 +100,8 @@ Let's say the result shall be stored in Redis in order to have it available as f
 #### Transformation
 
 ```
-OUT._k <- IN.info.company,
-OUT._v <- AVG(IN.info.views)
+OUT._r <- IN.info.company,
+OUT.avg_views <- AVG(IN.info.views)
 ```
 
 There are many more example where NotaQL may be used. If you run into issues do not hesitate to contact us.
