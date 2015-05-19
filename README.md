@@ -127,6 +127,6 @@ This is the initial publication of the NotaQL framework for cross-system data tr
 
 This project is a research prototype created at the
 [Heterogeneous Information Systems Group](http://wwwlgis.informatik.uni-kl.de/cms/his/) at the Technical University of Kaiserslautern.
-The framework was written by http://wwwlgis.informatik.uni-kl.de/cms/his/ during his work for his master's thesis with [jschildgen](https://github.com/jschildgen) being his supervisor.
+The framework was written by [TomLottermann](https://github.com/TomLottermann) during his work for his master's thesis with [jschildgen](https://github.com/jschildgen) being his supervisor.
 We open sourced it in order to allow new contributors to add new features, bug fixes, or simply
 use it for their own purposes.
