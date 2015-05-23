@@ -40,7 +40,7 @@ public class RedisInputPathStepVisitor extends NotaQL2KeyValueInBaseVisitor<Inpu
 
     @Override
     public InputPathStep visitIndex(@NotNull NotaQL2KeyValueInParser.IndexContext ctx) {
-        return new IdStep<>(new Step<>(Integer.parseInt(ctx.Index().getText())));
+        return new IdStep<>(new Step<>(Integer.parseInt(ctx.Int().getText())));
     }
 
     @Override

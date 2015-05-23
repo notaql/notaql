@@ -1,2 +1,2 @@
-IN-FILTER: IN.children[?(@.name = 'John')].allowance > '8',
+IN-FILTER: IN.children[?(@.name = 'John')].allowance > 8,
 OUT._id <- IN._id;

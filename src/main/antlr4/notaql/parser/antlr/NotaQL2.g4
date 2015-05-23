@@ -87,7 +87,6 @@ genericPathToken
     | String
     | Int
     | Float
-    | Index
     | Name
     | DOT
     | COLON
@@ -170,4 +169,4 @@ atom
 
 attributeId: attributeName = Name;
 
-index: indexNumber = Index;
+index: indexNumber = Int;

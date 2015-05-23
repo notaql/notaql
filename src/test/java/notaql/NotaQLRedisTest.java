@@ -46,7 +46,7 @@ public class NotaQLRedisTest {
     public void testInFilter() throws Exception {
         createGraphIn();
         String transformation = engines +
-                "IN-FILTER: IN._v.* > '2'," +
+                "IN-FILTER: IN._v.* > 2," +
                 "OUT._k <- IN._k," +
                 "OUT._v <- IN._v;";
 
@@ -98,7 +98,7 @@ public class NotaQLRedisTest {
         createGraphIn();
         String transformation = engines +
                 "OUT._k <- IN._v.*.name(),\n" +
-                "OUT.pr <- SUM('0.2'/(LIST_COUNT(IN._v)));";
+                "OUT.pr <- SUM(0.2/(LIST_COUNT(IN._v)));";
 
         NotaQL.evaluate(transformation);
     }

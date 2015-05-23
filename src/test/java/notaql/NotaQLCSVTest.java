@@ -78,7 +78,7 @@ public class NotaQLCSVTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._r <- IN._r," +
-                "OUT.$(IN._c?(@ > '8')) <- IN._v;";
+                "OUT.$(IN._c?(@ > 8)) <- IN._v;";
 
         NotaQL.evaluate(transformation);
     }
@@ -87,7 +87,7 @@ public class NotaQLCSVTest {
     public void testRowPredicate() throws Exception {
         createPaperIn();
         String transformation = engines +
-                "IN-FILTER: IN.Susi > '8'," +
+                "IN-FILTER: IN.Susi > 8," +
                 "OUT._r <- IN._r," +
                 "OUT.$(IN._c) <- IN._v;";
 

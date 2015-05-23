@@ -45,8 +45,6 @@ public class AtomValueVisitor extends NotaQL2BaseVisitor<AtomValue<?>> {
             string = ctx.Int().getText();
         }
 
-        string = string.substring(1, string.length() - 1);
-
         if(ctx.Float() != null) {
             return new NumberValue(Double.parseDouble(string));
         }

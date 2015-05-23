@@ -73,7 +73,7 @@ public class NotaQLColumnTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._r <- IN._r," +
-                "OUT.$(IN._c?(@ > '8')) <- IN._v;";
+                "OUT.$(IN._c?(@ > 8)) <- IN._v;";
 
         NotaQL.evaluate(transformation);
     }
@@ -82,7 +82,7 @@ public class NotaQLColumnTest {
     public void testRowPredicate() throws Exception {
         createPaperIn();
         String transformation = engines +
-                "IN-FILTER: IN.Susi > '10'," +
+                "IN-FILTER: IN.Susi > 10," +
                 "OUT._r <- IN._r," +
                 "OUT.$(IN._c) <- IN._v;";
 

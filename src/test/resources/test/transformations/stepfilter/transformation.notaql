@@ -1,2 +1,2 @@
 OUT._id <- IN._id,
-OUT.rich_children <- LIST(IN.children[?(@.allowance > '8')].name);
+OUT.rich_children <- LIST(IN.children[?(@.allowance > 8)].name);

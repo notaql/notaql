@@ -59,7 +59,7 @@ public class NotaQLMongoDBTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._id <- IN._id," +
-                "OUT.$(IN.children[?(@.allowance > '8')].name) <- IN.children[@].allowance;";
+                "OUT.$(IN.children[?(@.allowance > 8)].name) <- IN.children[@].allowance;";
 
         NotaQL.evaluate(transformation);
     }
@@ -68,7 +68,7 @@ public class NotaQLMongoDBTest {
     public void testInFilter() throws Exception {
         createPaperIn();
         String transformation = engines +
-                "IN-FILTER: IN.children[?(@.name = 'John')].allowance > '8'," +
+                "IN-FILTER: IN.children[?(@.name = 'John')].allowance > 8," +
                 "OUT._id <- IN._id;";
 
         NotaQL.evaluate(transformation);
@@ -194,7 +194,7 @@ public class NotaQLMongoDBTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._id <- 'alles',\n" +
-                "OUT.sum <- ('5' + '7') / '2';";
+                "OUT.sum <- (5 + 7) / 2;";
 
         NotaQL.evaluate(transformation);
     }
@@ -204,7 +204,7 @@ public class NotaQLMongoDBTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._id <- 'alles',\n" +
-                "OUT.sum <- SUM(IN.info.born) + '7';";
+                "OUT.sum <- SUM(IN.info.born) + 7;";
 
         NotaQL.evaluate(transformation);
     }
@@ -214,7 +214,7 @@ public class NotaQLMongoDBTest {
         createPaperIn();
         String transformation = engines +
                 "OUT._id <- 'alles',\n" +
-                "OUT.sum <- '7' + SUM(IN.info.born);";
+                "OUT.sum <- 7 + SUM(IN.info.born);";
 
         NotaQL.evaluate(transformation);
     }
