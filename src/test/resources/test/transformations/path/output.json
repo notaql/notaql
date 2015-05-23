@@ -8,11 +8,9 @@
     "child" : "John"
   },
   {
-    "_id" : "Susi",
-    "child" : null
+    "_id" : "Susi"
   },
   {
-    "_id" : "John",
-    "child" : null
+    "_id" : "John"
   }
 ]

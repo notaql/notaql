@@ -1,16 +1,10 @@
 [
   {
-    "_id" : "Susi",
-    "parents" : [
-      {"name" : "Kate", "allowance" : 20},
-      {"name" : "Peter", "allowance" : 10}
-    ]
+    "child" : "John",
+    "count" : 2
   },
   {
-    "_id" : "John",
-    "parents" : [
-      {"name" : "Kate", "allowance" : 10},
-      {"name" : "Peter", "allowance" : 5}
-    ]
+    "child" : "Susi",
+    "count" : 2
   }
 ]

@@ -140,6 +140,11 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
                     extendedPartialResults.add(new ValueEvaluationResult(splitPartialObject, valueEvaluationResult.getFixation().getMoreSpecific(moreSpecificFixation)));
                 }
             }
+
+            // in case the expression does not generate any results: keep the current value
+            if(valueEvaluationResults.isEmpty())
+                extendedPartialResults.add(extendableResult);
+
             partialResults = extendedPartialResults;
         }
 

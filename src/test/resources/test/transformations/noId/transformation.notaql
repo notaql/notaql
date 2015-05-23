@@ -1,0 +1,2 @@
+OUT.company <- IN.info.company,
+OUT.child <- IN.children[*].name
