@@ -1,0 +1,19 @@
+[
+  {
+    "_id" : "Kate"
+  },
+  {
+    "_id" : "Peter"
+  },
+  {
+    "_id" : "Susi",
+    "Eton" : 2,
+    "School" : 1,
+    "of" : 1,
+    "Business" : 1
+  },
+  {
+    "_id" : "John",
+    "Eton" : 1
+  }
+]

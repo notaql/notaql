@@ -1,0 +1,18 @@
+[
+  {
+    "_id" : "Kate",
+    "child" : "John"
+  },
+  {
+    "_id" : "Peter",
+    "child" : "John"
+  },
+  {
+    "_id" : "Susi",
+    "child" : null
+  },
+  {
+    "_id" : "John",
+    "child" : null
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "_id" : "Kate",
+    "info" : {
+      "born" : 1968,
+      "company" : "IBM",
+      "salary" : 60000
+    },
+    "children" : [
+      { "name" : "John" , "allowance" : 10},
+      { "name" : "Susi" , "allowance" : 20}
+    ]
+  },
+  {
+    "_id" : "Peter",
+    "info" : {
+      "born" : 1967 ,
+      "company" : "IBM" ,
+      "salary" : 50000
+    } ,
+    "children" : [
+      { "name" : "John" , "allowance" : 5},
+      { "name" : "Susi" , "allowance" : 10}
+    ]
+  },
+  {
+    "_id" : "Susi",
+    "info" : {
+      "born" : 1989,
+      "school" : "Eton School of Eton Business"
+    }
+  },
+  {
+    "_id" : "John",
+    "info" : {
+      "born" : 1991,
+      "school" : "Eton"
+    }
+  }
+]

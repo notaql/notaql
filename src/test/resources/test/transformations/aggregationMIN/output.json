@@ -1,0 +1,10 @@
+[
+  {
+    "_id" : "Susi",
+    "min_allowance" : 10
+  },
+  {
+    "_id" : "John",
+    "min_allowance" : 5
+  }
+]

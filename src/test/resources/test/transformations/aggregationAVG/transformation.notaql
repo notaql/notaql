@@ -1,0 +1,2 @@
+OUT._id <- IN.children[*].name,
+OUT.avg_allowance <- AVG(IN.children[@].allowance);

@@ -1,0 +1,2 @@
+OUT._id <- IN.children[*].name,
+OUT.sum_allowance <- SUM(IN.children[@].allowance);

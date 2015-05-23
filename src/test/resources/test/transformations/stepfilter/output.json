@@ -1,0 +1,18 @@
+[
+  {
+    "_id" : "Kate",
+    "rich_children" : ["John", "Susi"]
+  },
+  {
+    "_id" : "Peter",
+    "rich_children" : ["Susi"]
+  },
+  {
+    "_id" : "Susi",
+    "rich_children" : []
+  },
+  {
+    "_id" : "John",
+    "rich_children" : []
+  }
+]

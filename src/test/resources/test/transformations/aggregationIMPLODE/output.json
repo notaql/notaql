@@ -1,0 +1,10 @@
+[
+  {
+    "_id" : "Susi",
+    "allowances" : "10,20"
+  },
+  {
+    "_id" : "John",
+    "allowances" : "5,10"
+  }
+]

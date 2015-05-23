@@ -1,0 +1,3 @@
+OUT.child <- IN.children[*].name,
+OUT.school_part <- IN.info.school.split()[*],
+OUT.count <- COUNT();

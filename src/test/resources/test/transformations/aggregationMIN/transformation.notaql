@@ -1,0 +1,2 @@
+OUT._id <- IN.children[*].name,
+OUT.min_allowance <- MIN(IN.children[@].allowance);

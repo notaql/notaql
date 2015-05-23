@@ -1,0 +1,7 @@
+OUT._id <- IN.children[*].name,
+OUT.parents <- LIST(
+  OBJECT(
+    name <- IN._id,
+    allowance <- IN.children[@].allowance
+  )
+);

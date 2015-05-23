@@ -1,0 +1,18 @@
+[
+  {
+    "_id" : "Eton",
+    "children" : ["John", "Susi"]
+  },
+  {
+    "_id" : "School",
+    "children" : ["Susi"]
+  },
+  {
+    "_id" : "of",
+    "children" : ["Susi"]
+  },
+  {
+    "_id" : "Business",
+    "children" : ["Susi"]
+  }
+]

@@ -1,0 +1,2 @@
+OUT._id <- IN._id,
+OUT.children <- LIST(IN.children[*].name);

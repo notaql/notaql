@@ -1,0 +1,2 @@
+OUT._id <- IN.info.school.split(' ')[*],
+OUT.children <- LIST(IN._id);

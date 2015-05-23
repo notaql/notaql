@@ -1,0 +1,2 @@
+OUT._id <- IN._id,
+OUT.$(IN.info.school.split(' ')[*]) <- COUNT();

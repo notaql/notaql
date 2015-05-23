@@ -1,0 +1,16 @@
+[
+  {
+    "_id" : "Susi",
+    "parents" : [
+      {"name" : "Kate", "allowance" : 20},
+      {"name" : "Peter", "allowance" : 10}
+    ]
+  },
+  {
+    "_id" : "John",
+    "parents" : [
+      {"name" : "Kate", "allowance" : 10},
+      {"name" : "Peter", "allowance" : 5}
+    ]
+  }
+]
