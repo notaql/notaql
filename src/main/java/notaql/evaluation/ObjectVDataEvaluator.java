@@ -141,8 +141,8 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
                 }
             }
 
-            // in case the expression does not generate any results: keep the current value
-            if(valueEvaluationResults.isEmpty())
+            // in case the expression does not generate any results and: keep the current value (if it already contains data)
+            if(valueEvaluationResults.isEmpty() && ((PartialObjectValue) extendableResult.getValue()).size() > 0)
                 extendedPartialResults.add(extendableResult);
 
             partialResults = extendedPartialResults;
