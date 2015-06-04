@@ -91,6 +91,7 @@ public class JSONEngineEvaluator implements EngineEvaluator {
         final SparkTransformationEvaluator evaluator = new SparkTransformationEvaluator(transformation);
 
         final JavaRDD<Object> jsonRDD = sc.textFile(path)
+                .filter(s -> !s.equals("[") && !s.equals("]")) // if it consists of an array containing objects: just ignore the array TODO: this is kind of Q&D
                 .map(JSONObject::new);
 
         // convert all objects in rdd to inner format

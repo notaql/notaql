@@ -138,16 +138,19 @@ public class RedisEngineEvaluator implements EngineEvaluator {
             throw new EvaluationException(e);
         }
 
-        logger.info("Storing result.");
         jedis.select(databaseId);
 
         final List<ObjectValue> collect = result.collect();
 
+        if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true"))
+            collect.stream().forEach(t -> logger.info("Storing object: " + t.toString()));
+        else
+            logger.info("Storing " + collect.stream().count() + " objects.");
+
         for (ObjectValue objectValue : collect) {
-            logger.info("Storing object: " + objectValue.toString());
             ValueConverter.writeToRedis(jedis, objectValue);
         }
-        logger.info("Stored result.");
+
         disconnect();
     }
 

@@ -122,8 +122,13 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
 
     @Override
     public void store(JavaRDD<ObjectValue> result) {
-        final List<ObjectValue> collect = result.collect();
-        logger.info(collect.toString());
+        if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true")) {
+            final List<ObjectValue> collect = result.collect();
+            collect.stream().forEach(t -> logger.info("Storing object: " + t.toString()));
+        } else {
+            logger.info("Storing " + result.count() + " objects.");
+        }
+
         final Configuration conf = createConf();
 
         // create Table if it doesn't exist yet
