@@ -1,0 +1,2 @@
+IN-FILTER: IN.hasChildren = true,
+OUT._id <- IN._id;

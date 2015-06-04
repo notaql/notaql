@@ -16,10 +16,7 @@
 
 package notaql.parser;
 
-import notaql.datamodel.AtomValue;
-import notaql.datamodel.NumberValue;
-import notaql.datamodel.StringValue;
-import notaql.datamodel.Value;
+import notaql.datamodel.*;
 import notaql.model.vdata.AtomVData;
 import notaql.model.vdata.VData;
 import notaql.parser.antlr.NotaQL2BaseVisitor;
@@ -56,5 +53,15 @@ public class AtomValueVisitor extends NotaQL2BaseVisitor<AtomValue<?>> {
         String string = ctx.String().getText().replace("\\'", "'");
         string = string.substring(1, string.length() - 1);
         return new StringValue(string);
+    }
+
+    @Override
+    public AtomValue<?> visitFalseAtom(@NotNull NotaQL2Parser.FalseAtomContext ctx) {
+        return new BooleanValue(false);
+    }
+
+    @Override
+    public AtomValue<?> visitTrueAtom(@NotNull NotaQL2Parser.TrueAtomContext ctx) {
+        return new BooleanValue(true);
     }
 }

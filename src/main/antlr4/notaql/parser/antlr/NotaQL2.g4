@@ -159,12 +159,13 @@ outPredicate
 
 
 /**
-    Represents an atomic value (Int, Float or String) all wrapped in apostrophes
-    TODO: we might even remove the quotes around numbers at some point
+    Represents an atomic value (Int, Float, String, Boolean) all wrapped in apostrophes
 */
 atom
     : (Int | Float)     #numberAtom
     | String            #stringAtom
+    | TRUE              #trueAtom
+    | FALSE             #falseAtom
     ;
 
 attributeId: attributeName = Name;

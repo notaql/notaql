@@ -1,0 +1,18 @@
+[
+  {
+    "_id" : "Kate",
+    "hasChildren" : true
+  },
+  {
+    "_id" : "Peter",
+    "hasChildren" : true
+  },
+  {
+    "_id" : "Susi",
+    "hasChildren" : false
+  },
+  {
+    "_id" : "John",
+    "hasChildren" : false
+  }
+]

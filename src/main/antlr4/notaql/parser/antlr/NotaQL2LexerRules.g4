@@ -41,6 +41,9 @@ PLUS: '+';
 MINUS: '-';
 DIV: '/';
 
+TRUE: 'true';
+FALSE: 'false';
+
 Int: [0-9]+;
 Float: [0-9]+ '.' [0-9]+;
 
