@@ -145,7 +145,7 @@ public class RedisEngineEvaluator implements EngineEvaluator {
         if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true"))
             collect.stream().forEach(t -> logger.info("Storing object: " + t.toString()));
         else
-            logger.info("Storing " + collect.stream().count() + " objects.");
+            logger.info("Storing objects.");
 
         for (ObjectValue objectValue : collect) {
             ValueConverter.writeToRedis(jedis, objectValue);

@@ -118,7 +118,7 @@ public class JSONEngineEvaluator implements EngineEvaluator {
         if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true"))
             output.foreach(s -> logger.info("Storing object: " + s.toString()));
         else
-            logger.info("Storing " + output.count() + "objects.");
+            logger.info("Storing objects.");
 
         output.map(Object::toString).saveAsTextFile(path);
 

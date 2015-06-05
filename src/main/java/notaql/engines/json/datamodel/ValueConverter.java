@@ -21,6 +21,7 @@ import notaql.model.EvaluationException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -65,7 +66,9 @@ public class ValueConverter {
             final JSONObject jsonObject = (JSONObject) o;
             final ObjectValue result = new ObjectValue();
 
-            for (String key : jsonObject.keySet()) {
+            final Iterator<String> keyIterator = jsonObject.keys();
+            while(keyIterator.hasNext()) {
+                final String key = keyIterator.next();
                 final Step<String> step = new Step<>(key);
                 final Value value = convertToNotaQL(jsonObject.get(key));
 

@@ -126,7 +126,7 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
             final List<ObjectValue> collect = result.collect();
             collect.stream().forEach(t -> logger.info("Storing object: " + t.toString()));
         } else {
-            logger.info("Storing " + result.count() + " objects.");
+            logger.info("Storing objects.");
         }
 
         final Configuration conf = createConf();

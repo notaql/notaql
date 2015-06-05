@@ -145,7 +145,7 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
         if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true"))
             output.foreach(t -> logger.info("Storing object: " + t._2.toString()));
         else
-            logger.info("Storing " + output.count() + "objects.");
+            logger.info("Storing objects.");
 
         output.saveAsNewAPIHadoopFile("file:///notapplicable",
                 Object.class, Object.class, MongoOutputFormat.class, config);
