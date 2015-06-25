@@ -38,6 +38,7 @@ import java.util.List;
 /**
  * FIXME: THIS DOES NOT DIFFER FROM OBJECTVDATA YET!!! WHAT WAS THE PURPOSE OF THIS AGAIN?
  * FIXME: all tests in HBASE work this way... is this thing still relevant? oO
+ * FIXME: NOT USED ANYMORE!!!!
  */
 public class AggregatingObjectVDataEvaluator implements Evaluator, Reducer {
     private static final long serialVersionUID = 3086578932212713045L;

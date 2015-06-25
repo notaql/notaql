@@ -25,6 +25,7 @@ import notaql.model.EvaluationException;
 import notaql.model.Transformation;
 import notaql.model.path.OutputPath;
 import notaql.model.predicate.Predicate;
+import notaql.model.vdata.ObjectVData;
 import notaql.model.vdata.VData;
 import notaql.model.vdata.aggregation.AggregatingObjectVData;
 import notaql.parser.antlr.NotaQL2Parser;

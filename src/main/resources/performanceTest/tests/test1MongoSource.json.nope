@@ -1,0 +1,68 @@
+[
+  {
+    "name": "mongo->mongo",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedoutMongoSource"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._id <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "mongo->hbase",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedoutMongoSource"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._r <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "mongo->redis",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "2"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._k <- IN.thousandth, OUT._v <- COUNT()"
+  },
+  {
+    "name": "mongo->csv",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedoutMongoSource.csv"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "mongo->json",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedoutMongoSource.json"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
+  }
+]

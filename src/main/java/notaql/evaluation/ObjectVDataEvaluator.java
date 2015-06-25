@@ -28,6 +28,7 @@ import notaql.model.vdata.ObjectVData;
 import notaql.evaluation.values.PartialObjectValue;
 import notaql.model.vdata.VData;
 import notaql.evaluation.values.KeyGroupValue;
+import notaql.model.vdata.aggregation.AggregatingObjectVData;
 import scala.Tuple2;
 
 import java.util.Arrays;
@@ -271,6 +272,6 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
 
     @Override
     public List<Class<? extends VData>> getProcessedClasses() {
-        return Arrays.asList(ObjectVData.class);
+        return Arrays.asList(ObjectVData.class, AggregatingObjectVData.class);
     }
 }

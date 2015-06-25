@@ -1,0 +1,63 @@
+[
+  {
+    "name": "csv->mongo",
+    "IN-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reduced.csv"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedoutCSVSource"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._id <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "csv->hbase",
+    "IN-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reduced.csv"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedoutCSVSource"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._r <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "csv->redis",
+    "IN-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reduced.csv"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "5"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT._k <- IN.thousandth, OUT._v <- COUNT()"
+  },
+  {
+    "name": "csv->csv",
+    "IN-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reduced.csv"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedoutCSVSource.csv"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "csv->json",
+    "IN-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reduced.csv"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedoutCSVSource.json"
+    },
+    "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
+  }
+]

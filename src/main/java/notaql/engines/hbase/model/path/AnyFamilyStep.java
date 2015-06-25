@@ -56,6 +56,7 @@ public class AnyFamilyStep implements InputPathStep {
         final ComplexValue<?> value = (ComplexValue<?>) step.getValue();
         final Fixation fixation = step.getFixation();
 
+        // FIXME: Something here is wrong.
         if(nextStep != null && nextStep instanceof AnyFamilyFixationStep<?>) {
             final Optional<ValueEvaluationResult> result = value.toMap().entrySet()
                     .stream()

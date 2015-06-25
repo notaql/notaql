@@ -23,6 +23,5 @@ notaql.evaluation.ArithmeticVDataEvaluator
 notaql.evaluation.BracedVDataEvaluator
 notaql.evaluation.AvgVDataEvaluator
 notaql.evaluation.ExtremumVDataEvaluator
-notaql.evaluation.AggregatingObjectVDataEvaluator
 
 notaql.engines.mongodb.evaluation.ObjectIdFunctionVDataEvaluator

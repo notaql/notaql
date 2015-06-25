@@ -16,10 +16,12 @@
 
 package notaql;
 
+import notaql.engines.redis.datamodel.ValueConverter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -116,10 +118,23 @@ public class NotaQLRedisTest {
 
     @After
     public void tearDown() throws Exception {
+        printOut();
+
         jedis.flushDB();
         jedis.select(dbOutId);
         jedis.flushDB();
         jedis.close();
+    }
+
+    public void printOut() {
+        System.out.println("================= OUT ==================");
+        final ScanResult<String> scan = jedis.scan("0");
+
+        final ValueConverter converter = new ValueConverter(NotaQL.prop.getProperty("redis_host", "localhost"), dbOutId);
+
+        for (String s : scan.getResult()) {
+            System.out.println(s + ": " + converter.readFromRedis(s));
+        }
     }
 
     public void createGraphIn() throws IOException {

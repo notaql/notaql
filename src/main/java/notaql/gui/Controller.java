@@ -29,6 +29,9 @@ import notaql.engines.EngineService;
 import org.controlsfx.dialog.Dialogs;
 
 import java.net.URL;
+import java.text.Format;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -42,6 +45,7 @@ public class Controller implements Initializable {
     public GridPane engineGrid;
     public ComboBox<Engine> inEngineComboBox;
     public ComboBox<Engine> outEngineComboBox;
+    public Label statusLabel;
 
     private List<TextField> inArgumentFields = new LinkedList<>();
     private List<TextField> outArgumentFields = new LinkedList<>();
@@ -57,6 +61,7 @@ public class Controller implements Initializable {
         queryArea.setDisable(true);
         executeButton.setDisable(true);
         indicator.setVisible(true);
+        final Instant startTime = Instant.now();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -66,6 +71,9 @@ public class Controller implements Initializable {
                     executeButton.setDisable(false);
                     queryArea.setDisable(false);
                     engineGrid.setDisable(false);
+                    final Instant endTime = Instant.now();
+
+                    statusLabel.setText("Last execution took: " + Duration.between(startTime, endTime));
                 });
             }
         };

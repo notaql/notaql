@@ -49,6 +49,17 @@ public class NotaQLColumnTest {
     }
 
     @Test
+    public void testCopy() throws Exception {
+        createPaperIn();
+        String transformation = engines +
+                "OUT._r <- IN._r," +
+                "OUT.born <- IN.born," +
+                "OUT.Susi <- IN.Susi;";
+
+        NotaQL.evaluate(transformation);
+    }
+
+    @Test
     public void testColCount() throws Exception {
         createPaperIn();
         String transformation = engines +

@@ -36,6 +36,7 @@ import notaql.parser.path.OutputPathParser;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanResult;
 
 import java.net.ConnectException;
 import java.util.HashSet;
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
  */
 public class RedisEngineEvaluator implements EngineEvaluator {
     private final TransformationParser parser;
-    private int databaseId;
+    private final int databaseId;
 
     private Jedis jedis;
     private Engine engine;
@@ -106,8 +107,12 @@ public class RedisEngineEvaluator implements EngineEvaluator {
         final ListBasedCollectionValue inCollection = new ListBasedCollectionValue();
         jedis.select(databaseId);
         final Set<String> keys = jedis.keys("*");
+
+        final String host = NotaQL.prop.getProperty("redis_host", "localhost");
+        final ValueConverter converter = new ValueConverter(host, databaseId);
+
         for (String key: keys) {
-            final Value value = ValueConverter.readFromRedis(jedis, key);
+            final Value value = converter.readFromRedis(key);
 
             final ObjectValue objectValue = new ObjectValue();
             objectValue.put(new Step<>("_id"), new StringValue(key));
@@ -126,7 +131,6 @@ public class RedisEngineEvaluator implements EngineEvaluator {
     }
 
     /**
-     * TODO: this is really slow and doesn't scale!
      * @param result
      */
     @Override
@@ -140,16 +144,14 @@ public class RedisEngineEvaluator implements EngineEvaluator {
 
         jedis.select(databaseId);
 
-        final List<ObjectValue> collect = result.collect();
+        logger.info("Storing objects.");
 
-        if(NotaQL.prop.getProperty("log_output") != null && NotaQL.prop.getProperty("log_output").equals("true"))
-            collect.stream().forEach(t -> logger.info("Storing object: " + t.toString()));
-        else
-            logger.info("Storing objects.");
+        final String host = NotaQL.prop.getProperty("redis_host", "localhost");
+        final ValueConverter converter = new ValueConverter(host, databaseId);
 
-        for (ObjectValue objectValue : collect) {
-            ValueConverter.writeToRedis(jedis, objectValue);
-        }
+        result.foreach(
+                converter::writeToRedis
+        );
 
         disconnect();
     }

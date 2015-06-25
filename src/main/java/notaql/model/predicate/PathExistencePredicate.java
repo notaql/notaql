@@ -47,6 +47,10 @@ public class PathExistencePredicate implements Predicate {
         return evaluation.size() > 0;
     }
 
+    public InputPath getPath() {
+        return path;
+    }
+
     @Override
     public String toString() {
         return path.toString();

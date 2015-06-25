@@ -1,0 +1,63 @@
+[
+  {
+    "name": "hbase->mongo",
+    "IN-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedout2HBaseSource"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._r, OUT.$(IN._c) <- IN._v;"
+  },
+  {
+    "name": "hbase->hbase",
+    "IN-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedout2HBaseSource"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._r, OUT.$(IN._c) <- IN._v;"
+  },
+  {
+    "name": "hbase->redis",
+    "IN-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "9"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._r, OUT.$(IN._c) <- IN._v;"
+  },
+  {
+    "name": "hbase->csv",
+    "IN-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedout2HBaseSource.csv"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._r, OUT.$(IN._c) <- IN._v;"
+  },
+  {
+    "name": "hbase->json",
+    "IN-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedout2HBaseSource.json"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._r, OUT.$(IN._c) <- IN._v;"
+  }
+]

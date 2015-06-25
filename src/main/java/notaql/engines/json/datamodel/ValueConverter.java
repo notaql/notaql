@@ -93,6 +93,11 @@ public class ValueConverter {
         if(o instanceof SplitAtomValue<?>)
             return ((SplitAtomValue<?>)o).getValue();
 
+        // if unknown: fall back to strings
+        if(o instanceof AtomValue<?>) {
+            return ((AtomValue<?>) o).getValue().toString();
+        }
+
         // complex values
         if(o instanceof ListValue) {
             return new JSONArray(

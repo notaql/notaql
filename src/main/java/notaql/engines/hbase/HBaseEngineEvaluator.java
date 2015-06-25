@@ -142,17 +142,21 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
                 descriptor.addFamily(new HColumnDescriptor(HBaseOutputPathVisitor.DEFAULT_COL_FAMILY));
                 admin.createTable(descriptor);
             }
+            // TODO: disable for performance measuring
+            if(true) {
+                final HTable table = new HTable(conf, tableId);
 
-            final HTable table = new HTable(conf, tableId);
+                final List<String> families = result
+                        .flatMap(ObjectValue::keySet)
+                        .map(Step::getStep)
+                        .filter(s -> !s.equals("_id") && !s.equals(HBaseOutputPathVisitor.DEFAULT_COL_FAMILY))
+                        .distinct()
+                        .collect();
 
-            final List<Step<String>> families = result
-                    .flatMap(ObjectValue::keySet)
-                    .filter(s -> !s.getStep().equals("_id") && !s.getStep().equals(HBaseOutputPathVisitor.DEFAULT_COL_FAMILY))
-                    .collect();
-
-            admin.disableTable(table.getTableName());
-            families.forEach(s -> createFamily(s.getStep(), table));
-            admin.enableTable(table.getTableName());
+                admin.disableTable(table.getTableName());
+                families.forEach(s -> createFamily(s, table));
+                admin.enableTable(table.getTableName());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

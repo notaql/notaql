@@ -20,6 +20,8 @@ import notaql.datamodel.*;
 import notaql.model.EvaluationException;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,8 +30,21 @@ import java.util.stream.Collectors;
 /**
  * Created by Thomas Lottermann on 06.12.14.
  */
-public class ValueConverter {
-    public static Value readFromRedis(Jedis jedis, String key) {
+public class ValueConverter implements Serializable{
+    private static final long serialVersionUID = -96963660334231597L;
+    private final String host;
+    private final int databaseId;
+
+    private transient Jedis jedis;
+
+    public ValueConverter(String host, int databaseId) {
+        this.host = host;
+        this.databaseId = databaseId;
+        jedis = new Jedis(host);
+        jedis.select(databaseId);
+    }
+
+    public Value readFromRedis(String key) {
         // get the type
         final String type = jedis.type(key);
 
@@ -65,9 +80,13 @@ public class ValueConverter {
         throw new EvaluationException("Unsupported type read: " + type);
     }
 
-    public static void writeToRedis(Jedis jedis, ObjectValue o) {
+    public void writeToRedis(ObjectValue o) {
         final Value id = o.get(new Step<>("_id"));
         final Value v = o.get(new Step<>("_v"));
+
+        if(v == null)
+            return;
+
         assert id != null && id instanceof AtomValue<?> && v != null;
 
         final String k = ((AtomValue<?>)id).getValue().toString();
@@ -108,5 +127,12 @@ public class ValueConverter {
         }
 
         throw new EvaluationException("Unsupported type written: " + v.getClass() + ": " + v.toString());
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        jedis = new Jedis(host);
+        jedis.select(databaseId);
     }
 }

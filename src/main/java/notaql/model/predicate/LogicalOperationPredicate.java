@@ -47,6 +47,18 @@ public class LogicalOperationPredicate implements Predicate {
         }
     }
 
+    public Predicate getLeft() {
+        return left;
+    }
+
+    public Predicate getRight() {
+        return right;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
     @Override
     public String toString() {
         return left.toString() + " " + operator.toString() + " " + right.toString();

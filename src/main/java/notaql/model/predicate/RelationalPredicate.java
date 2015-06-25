@@ -178,6 +178,18 @@ public class RelationalPredicate implements Predicate {
         throw new EvaluationException("Unknown operator: " + operator);
     }
 
+    public VData getLeft() {
+        return left;
+    }
+
+    public VData getRight() {
+        return right;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
     @Override
     public String toString() {
         return left.toString() + " " + operator.toString() + " " + right.toString();

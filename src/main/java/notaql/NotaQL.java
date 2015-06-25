@@ -128,6 +128,11 @@ public class NotaQL {
             SparkConf conf = new SparkConf().setAppName("NotaQL").setMaster(NotaQL.prop.getProperty("spark_master", "local"));
             if(NotaQL.prop.getProperty("parallelism") != null)
                 conf.set("spark.default.parallelism", NotaQL.prop.getProperty("parallelism"));
+            if(NotaQL.prop.getProperty("kryo") != null && NotaQL.prop.getProperty("kryo").equals("true")) {
+                conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
+                conf.set("spark.kryoserializer.buffer.mb", "24");
+            }
+
             final SparkContext sc = new SparkContext(conf);
             // TODO: Add progress/timing magic here!
 

@@ -35,6 +35,10 @@ public class NegatedPredicate implements Predicate {
         return !predicate.evaluate(step, contextFixation);
     }
 
+    public Predicate getPredicate() {
+        return predicate;
+    }
+
     @Override
     public String toString() {
         return "!" + predicate.toString();

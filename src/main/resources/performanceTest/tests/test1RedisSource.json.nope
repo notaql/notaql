@@ -1,0 +1,63 @@
+[
+  {
+    "name": "redis->mongo",
+    "IN-ENGINE": {
+      "engine": "redis",
+      "database_id": "1"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedoutRedisSource"
+    },
+    "transformation": "IN-FILTER: IN._v.bool = true, OUT._id <- IN._v.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "redis->hbase",
+    "IN-ENGINE": {
+      "engine": "redis",
+      "database_id": "1"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedoutRedisSource"
+    },
+    "transformation": "IN-FILTER: IN._v.bool = true, OUT._r <- IN._v.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "redis->redis",
+    "IN-ENGINE": {
+      "engine": "redis",
+      "database_id": "1"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "4"
+    },
+    "transformation": "IN-FILTER: IN._v.bool = true, OUT._k <- IN._v.thousandth, OUT._v <- COUNT()"
+  },
+  {
+    "name": "redis->csv",
+    "IN-ENGINE": {
+      "engine": "redis",
+      "database_id": "1"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedoutRedisSource.csv"
+    },
+    "transformation": "IN-FILTER: IN._v.bool = true, OUT.thousandth <- IN._v.thousandth, OUT.count <- COUNT()"
+  },
+  {
+    "name": "redis->json",
+    "IN-ENGINE": {
+      "engine": "redis",
+      "database_id": "1"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedoutRedisSource.json"
+    },
+    "transformation": "IN-FILTER: IN._v.bool = true, OUT.thousandth <- IN._v.thousandth, OUT.count <- COUNT()"
+  }
+]
