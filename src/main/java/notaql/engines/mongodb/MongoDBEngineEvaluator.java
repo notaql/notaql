@@ -137,6 +137,7 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
 
         Configuration config = new Configuration();
         config.set("mongo.output.uri", mongoDBHost + databaseName + "." + collectionName);
+        // TODO: use mongo.input.query for executing parts in mongodb (https://github.com/mongodb/mongo-hadoop/wiki/Configuration-Reference#mongoinputquery)
 
         JavaPairRDD<Object,BSONObject> output = result.mapToPair(
                 o -> new Tuple2<>(null, (DBObject)ValueConverter.convertFromNotaQL(o))
