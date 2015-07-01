@@ -75,6 +75,36 @@ public class NotaQLMongoDBTest {
     }
 
     @Test
+    public void testExistenceInFilter() throws Exception {
+        createPaperIn();
+        String transformation = engines +
+                "IN-FILTER: IN.children," +
+                "OUT._id <- IN._id;";
+
+        NotaQL.evaluate(transformation);
+    }
+
+    @Test
+    public void testSimpleInFilter() throws Exception {
+        createPaperIn();
+        String transformation = engines +
+                "IN-FILTER: IN.info.salary > 50000," +
+                "OUT._id <- IN._id;";
+
+        NotaQL.evaluate(transformation);
+    }
+
+    @Test
+    public void testSimpleInFilterReversed() throws Exception {
+        createPaperIn();
+        String transformation = engines +
+                "IN-FILTER:  50000 < IN.info.salary," +
+                "OUT._id <- IN._id;";
+
+        NotaQL.evaluate(transformation);
+    }
+
+    @Test
     public void testTranspose() throws Exception {
         createPaperIn();
         String transformation = engines +

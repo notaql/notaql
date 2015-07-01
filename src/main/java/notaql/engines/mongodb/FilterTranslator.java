@@ -18,7 +18,7 @@ package notaql.engines.mongodb;
 
 import notaql.datamodel.Step;
 import notaql.model.EvaluationException;
-import notaql.model.path.BoundIdStep;
+import notaql.model.path.IdStep;
 import notaql.model.path.InputPath;
 import notaql.model.path.InputPathStep;
 import notaql.model.predicate.*;
@@ -28,6 +28,8 @@ import notaql.model.vdata.VData;
 import org.bson.BSONObject;
 import org.bson.BasicBSONObject;
 import org.bson.types.BasicBSONList;
+
+import java.util.stream.Collectors;
 
 /**
  * Created by thomas on 12.06.15.
@@ -48,6 +50,9 @@ public class FilterTranslator {
      * @return
      */
     private static BSONObject translatePredicate(Predicate predicate) {
+        if(predicate == null)
+            return new BasicBSONObject();
+
         if(predicate instanceof LogicalOperationPredicate)
             return translateLogicalOperationPredicate((LogicalOperationPredicate) predicate);
         if(predicate instanceof NegatedPredicate)
@@ -122,22 +127,24 @@ public class FilterTranslator {
             }
         }
 
-        assert field.getPath().getPathSteps().size() == 1 && field.getPath().getPathSteps().get(0) instanceof BoundIdStep;
+        assert field.getPath().getPathSteps().size() >= 1 && field.getPath().getPathSteps().stream().allMatch(s -> s instanceof IdStep);
 
-        final Step step = ((BoundIdStep) field.getPath().getPathSteps().get(0)).getId();
+        final String path = field.getPath().getPathSteps().stream()
+                .map(s -> ((IdStep) s).getId().getStep().toString())
+                .collect(Collectors.joining("."));
 
-        assert step.getStep() instanceof String;
-
-        return new BasicBSONObject((String)step.getStep(), new BasicBSONObject(op, value.getValue().getValue()));
+        return new BasicBSONObject(path, new BasicBSONObject(op, value.getValue().getValue()));
     }
 
     private static BSONObject translatePathExistencePredicate(PathExistencePredicate predicate) {
-        assert predicate.getPath().getPathSteps().size() == 1 && predicate.getPath().getPathSteps().get(0) instanceof BoundIdStep;
+        assert predicate.getPath().getPathSteps().size() >= 1 && predicate.getPath().getPathSteps().stream().allMatch(s -> s instanceof IdStep);
 
-        final String step = ((BoundIdStep) predicate.getPath().getPathSteps().get(0)).getId().toString();
+        final String path = predicate.getPath().getPathSteps().stream()
+                .map(s -> ((IdStep) s).getId().getStep().toString())
+                .collect(Collectors.joining("."));
 
         final BasicBSONObject query = new BasicBSONObject();
-        query.put(step, new BasicBSONObject("$exists", true));
+        query.put(path, new BasicBSONObject("$exists", true));
         return query;
     }
 
@@ -239,13 +246,13 @@ public class FilterTranslator {
     }
 
     private static InputPath reduceInputPath(InputPath path) {
-        if(path.getPathSteps().size() != 1)
+        if(path.getPathSteps().size() < 1)
             return null;
-        final InputPathStep step = path.getPathSteps().get(0);
-        if(step instanceof BoundIdStep)
-            return new InputPath(step);
 
-        return null;
+        if(!path.getPathSteps().stream().allMatch(s -> s instanceof IdStep))
+            return null;
+
+        return path;
     }
 
     private static VData reduceAtomVData(AtomVData vData) {
