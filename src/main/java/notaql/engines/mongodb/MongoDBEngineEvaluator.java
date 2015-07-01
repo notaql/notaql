@@ -110,13 +110,20 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
         Configuration config = new Configuration();
         config.set("mongo.input.uri", mongoDBHost + databaseName + "." + collectionName);
 
+        // add partial filter to query in mongodb
+        if(transformation.getInPredicate() != null) {
+            final BSONObject query = FilterTranslator.toMongoDBQuery(transformation.getInPredicate());
+            logger.info("Sending query to MongoDB: " + query.toString());
+            config.set("mongo.input.query", query.toString());
+        }
+
         final SparkTransformationEvaluator evaluator = new SparkTransformationEvaluator(transformation);
 
         JavaPairRDD<Object, BSONObject> mongoRDD = sc.newAPIHadoopRDD(config, MongoInputFormat.class, Object.class, BSONObject.class);
 
         // convert all objects in rdd to inner format
         final JavaRDD<Value> converted = mongoRDD.map(t -> ValueConverter.convertToNotaQL(t._2));
-        // filter the ones not fulfilling the input filter
+        // filter the ones not fulfilling the input filter (queries of MongoDB are less expressive than NotaQL)
         final JavaRDD<Value> filtered = converted.filter(v -> transformation.satisfiesInPredicate((ObjectValue) v));
 
         // process all input

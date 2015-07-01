@@ -45,6 +45,10 @@ public class IdStep<T> implements InputPathStep, OutputPathStep {
         return Arrays.asList(new StepNameEvaluationResult(fixation, step, id));
     }
 
+    public Step<T> getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return id.toString();
