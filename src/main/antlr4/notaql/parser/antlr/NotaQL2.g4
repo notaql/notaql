@@ -39,7 +39,7 @@ Input and output engines are composed by the key word IN-ENGINE/OUT-ENGINE follo
 inEngine: 'IN-ENGINE:' engine;
 outEngine: 'OUT-ENGINE:' engine;
 
-engine: engineName=Name '(' (Name '<-' atom (',' Name '<-' atom)?)? ')';
+engine: engineName=Name '(' (Name '<-' atom (',' Name '<-' atom)*)? ')';
 
 /**
 An attribute specification consistes of an output path and an arbitrary vData expression

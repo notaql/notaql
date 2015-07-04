@@ -1,67 +1,63 @@
 [
   {
-    "name": "mongo->mongo",
+    "name": "hbase->mongo",
     "IN-ENGINE": {
-      "engine": "mongodb",
-      "database_name": "test",
-      "collection_name": "nobench_10_reduced"
+      "engine": "hbase",
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "mongodb",
       "database_name": "test",
-      "collection_name": "nobench_10_reducedoutMongoSource"
+      "collection_name": "nobench_10_reducedoutHBaseSource"
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT._id <- IN.thousandth, OUT.count <- COUNT()"
   },
   {
-    "name": "mongo->hbase",
+    "name": "hbase->hbase",
     "IN-ENGINE": {
-      "engine": "mongodb",
-      "database_name": "test",
-      "collection_name": "nobench_10_reduced"
+      "engine": "hbase",
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reducedoutMongoSource"
+      "table_id": "nobench_10_reducedoutHBaseSource",
+      "all_default": true
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT._r <- IN.thousandth, OUT.count <- COUNT()"
   },
   {
-    "name": "mongo->redis",
+    "name": "hbase->redis",
     "IN-ENGINE": {
-      "engine": "mongodb",
-      "database_name": "test",
-      "collection_name": "nobench_10_reduced"
+      "engine": "hbase",
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "redis",
-      "database_id": "2"
+      "database_id": "3"
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT._k <- IN.thousandth, OUT._v <- COUNT()"
   },
   {
-    "name": "mongo->csv",
+    "name": "hbase->csv",
     "IN-ENGINE": {
-      "engine": "mongodb",
-      "database_name": "test",
-      "collection_name": "nobench_10_reduced"
+      "engine": "hbase",
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "csv",
-      "csv_path": "/home/notaql/perf/nobench_10_reducedoutMongoSource.csv"
+      "csv_path": "/home/notaql/perf/nobench_10_reducedoutHBaseSource.csv"
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
   },
   {
-    "name": "mongo->json",
+    "name": "hbase->json",
     "IN-ENGINE": {
-      "engine": "mongodb",
-      "database_name": "test",
-      "collection_name": "nobench_10_reduced"
+      "engine": "hbase",
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reducedoutMongoSource.json"
+      "path": "/home/notaql/perf/nobench_10_reducedoutHBaseSource.json"
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT.thousandth <- IN.thousandth, OUT.count <- COUNT()"
   }

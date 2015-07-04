@@ -1,0 +1,208 @@
+[
+  {
+    "name": "mongo->mongo (no query)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced",
+      "no_query": true
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedout2MongoSourceNoQuery"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->hbase (no query)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced",
+      "no_query": true
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedout2MongoSourceNoQuery",
+      "all_default": true
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->redis (no query)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced",
+      "no_query": true
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "6"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->csv (no query)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced",
+      "no_query": true
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceNoQuery.csv"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->json (no query)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced",
+      "no_query": true
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceNoQuery.json"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->mongo (no index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedout2MongoSourceNoIndex"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->hbase (no index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedout2MongoSourceNoIndex",
+      "all_default": true
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->redis (no index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "6"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->csv (no index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceNoIndex.csv"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->json (no index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceNoIndex.json"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->mongo (index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced_indexed"
+    },
+    "OUT-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_reducedout2MongoSourceIndex"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->hbase (index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced_indexed"
+    },
+    "OUT-ENGINE": {
+      "engine": "hbase",
+      "table_id": "nobench_10_reducedout2MongoSourceIndex",
+      "all_default": true
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->redis (index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced_indexed"
+    },
+    "OUT-ENGINE": {
+      "engine": "redis",
+      "database_id": "6"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->csv (index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced_indexed"
+    },
+    "OUT-ENGINE": {
+      "engine": "csv",
+      "csv_path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceIndex.csv"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  },
+  {
+    "name": "mongo->json (index)",
+    "IN-ENGINE": {
+      "engine": "mongodb",
+      "database_name": "test",
+      "collection_name": "nobench_10_newreduced_indexed"
+    },
+    "OUT-ENGINE": {
+      "engine": "json",
+      "path": "/home/notaql/perf/nobench_10_reducedout2MongoSourceIndex.json"
+    },
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+  }
+]

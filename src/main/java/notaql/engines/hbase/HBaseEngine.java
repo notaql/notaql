@@ -44,7 +44,7 @@ public class HBaseEngine implements Engine {
 
     @Override
     public List<String> getArguments() {
-        return Arrays.asList("table_id");
+        return Arrays.asList("table_id", "all_default");
     }
 
     @Override

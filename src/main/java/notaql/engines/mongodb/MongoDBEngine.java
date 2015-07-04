@@ -45,7 +45,7 @@ public class MongoDBEngine implements Engine {
 
     @Override
     public List<String> getArguments() {
-        return Arrays.asList("database_name", "collection_name");
+        return Arrays.asList("database_name", "collection_name", "no_query");
     }
 
     @Override

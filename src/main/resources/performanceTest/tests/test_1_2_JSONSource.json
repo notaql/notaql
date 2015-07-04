@@ -3,7 +3,7 @@
     "name": "json->mongo",
     "IN-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reduced.json"
+      "path": "/home/notaql/perf/nobench_10_newreduced.json"
     },
     "OUT-ENGINE": {
       "engine": "mongodb",
@@ -16,11 +16,12 @@
     "name": "json->hbase",
     "IN-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reduced.json"
+      "path": "/home/notaql/perf/nobench_10_newreduced.json"
     },
     "OUT-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reducedoutJSONSource"
+      "table_id": "nobench_10_reducedoutJSONSource",
+      "all_default": true
     },
     "transformation": "IN-FILTER: IN.bool = true, OUT._r <- IN.thousandth, OUT.count <- COUNT()"
   },
@@ -28,7 +29,7 @@
     "name": "json->redis",
     "IN-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reduced.json"
+      "path": "/home/notaql/perf/nobench_10_newreduced.json"
     },
     "OUT-ENGINE": {
       "engine": "redis",
@@ -40,7 +41,7 @@
     "name": "json->csv",
     "IN-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reduced.json"
+      "path": "/home/notaql/perf/nobench_10_newreduced.json"
     },
     "OUT-ENGINE": {
       "engine": "csv",
@@ -52,7 +53,7 @@
     "name": "json->json",
     "IN-ENGINE": {
       "engine": "json",
-      "path": "/home/notaql/perf/nobench_10_reduced.json"
+      "path": "/home/notaql/perf/nobench_10_newreduced.json"
     },
     "OUT-ENGINE": {
       "engine": "json",

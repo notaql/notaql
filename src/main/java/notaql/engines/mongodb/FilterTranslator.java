@@ -133,6 +133,10 @@ public class FilterTranslator {
                 .map(s -> ((IdStep) s).getId().getStep().toString())
                 .collect(Collectors.joining("."));
 
+        // TODO: this is a quick fix for mongodb < 3.0
+        if(op.equals("$eq"))
+            return new BasicBSONObject(path, value.getValue().getValue());
+
         return new BasicBSONObject(path, new BasicBSONObject(op, value.getValue().getValue()));
     }
 

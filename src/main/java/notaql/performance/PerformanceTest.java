@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Created by thomas on 04.06.15.
+ * TODO: The mongodb collections must be compacted before running performance tests!
  */
 public class PerformanceTest {
     private static final String BASE_PATH = "/performanceTest/tests";
@@ -59,24 +59,27 @@ public class PerformanceTest {
         final List<Path> tests = Files
                 .list(Paths.get(basePath))
                 .filter(p -> p.toString().endsWith(".json"))
+                .sorted((a, b) -> a.toString().compareTo(b.toString()))
                 .collect(Collectors.toList());
 
         List<String> csv = new LinkedList<>();
 
         for (Path test : tests) {
-            final Set<JSONObject> transformations = readArray(test);
+            final List<JSONObject> transformations = readArray(test);
 
             csv.add(test.getFileName().toString());
+
+            int i = 1;
 
             for (JSONObject transformation : transformations) {
                 final String name = transformation.getString("name");
                 final String notaqlTransformation = composeTransformation(transformation);
 
-                System.out.println("Evaluation test: " + test.getFileName() + ": " + name);
+                System.out.println("Evaluation test ("+ i++ +"/"+ transformations.size() +"): " + test.getFileName() + ": " + name);
 
                 List<Duration> durations = new LinkedList<>();
 
-                for(int i = 0; i < RUNS; i++) {
+                for(i = 0; i < RUNS; i++) {
                     clean(transformation);
 
                     final Instant startTime = Instant.now();
@@ -164,11 +167,11 @@ public class PerformanceTest {
         builder.append("(");
 
         final String params = StreamSupport.stream(
-                    Spliterators.spliteratorUnknownSize(engine.keys(), Spliterator.ORDERED),
-                    false
-                )
+                Spliterators.spliteratorUnknownSize(engine.keys(), Spliterator.ORDERED),
+                false
+        )
                 .filter(k -> !k.equals("engine"))
-                .map(k -> k + " <- '" + engine.getString(k) + "'")
+                .map(k -> k + " <- " + toArg(k, engine))
                 .collect(Collectors.joining(", "));
 
         builder.append(params);
@@ -177,11 +180,19 @@ public class PerformanceTest {
         return builder.toString();
     }
 
-    private static Set<JSONObject> readArray(Path path) throws IOException {
+    private static String toArg(String key, JSONObject engine) {
+        final Object val = engine.get(key);
+        if(val instanceof Boolean || val instanceof Number)
+            return val.toString();
+
+        return "'" + val.toString() + "'";
+    }
+
+    private static List<JSONObject> readArray(Path path) throws IOException {
         final String input = Files.lines(path).collect(Collectors.joining());
         final JSONArray jsonArray = new JSONArray(input);
 
-        final HashSet<JSONObject> elements = new HashSet<>();
+        final List<JSONObject> elements = new LinkedList<>();
         for(int i = 0; i < jsonArray.length(); i++) {
             final Object element = jsonArray.get(i);
             if(!(element instanceof JSONObject))

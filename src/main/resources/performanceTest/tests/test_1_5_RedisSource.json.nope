@@ -20,7 +20,8 @@
     },
     "OUT-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reducedoutRedisSource"
+      "table_id": "nobench_10_reducedoutRedisSource",
+      "all_default": true
     },
     "transformation": "IN-FILTER: IN._v.bool = true, OUT._r <- IN._v.thousandth, OUT.count <- COUNT()"
   },

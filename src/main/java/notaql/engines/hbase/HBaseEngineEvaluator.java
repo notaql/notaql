@@ -17,10 +17,7 @@
 package notaql.engines.hbase;
 
 import notaql.NotaQL;
-import notaql.datamodel.AtomValue;
-import notaql.datamodel.ObjectValue;
-import notaql.datamodel.Step;
-import notaql.datamodel.Value;
+import notaql.datamodel.*;
 import notaql.engines.Engine;
 import notaql.engines.EngineEvaluator;
 import notaql.engines.hbase.datamodel.ValueConverter;
@@ -73,6 +70,7 @@ import java.util.stream.Collectors;
 public class HBaseEngineEvaluator implements EngineEvaluator {
     private final Engine engine;
     private final String tableId;
+    private final boolean allDefault;
 
     private final static Logger logger = Logger.getLogger(HBaseEngineEvaluator.class.getName());
     private final TransformationParser parser;
@@ -81,13 +79,14 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
         this.engine = engine;
         this.parser = parser;
 
-        if (!params.keySet().equals(new HashSet<>(engine.getArguments())))
+        if (!params.keySet().contains("table_id"))
             throw new EvaluationException(
                     "HBase engine expects the following parameters on initialization: " +
                             engine.getArguments().stream().collect(Collectors.joining(", "))
             );
 
         this.tableId = params.get("table_id").getValue().toString();
+        this.allDefault = (Boolean)params.getOrDefault("all_default", new BooleanValue(false)).getValue();
     }
 
     @Override
@@ -142,8 +141,8 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
                 descriptor.addFamily(new HColumnDescriptor(HBaseOutputPathVisitor.DEFAULT_COL_FAMILY));
                 admin.createTable(descriptor);
             }
-            // TODO: disable for performance measuring
-            if(true) {
+
+            if(!allDefault) {
                 final HTable table = new HTable(conf, tableId);
 
                 final List<String> families = result

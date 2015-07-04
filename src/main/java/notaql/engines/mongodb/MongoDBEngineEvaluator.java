@@ -23,6 +23,7 @@ import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.MongoOutputFormat;
 import notaql.NotaQL;
 import notaql.datamodel.AtomValue;
+import notaql.datamodel.BooleanValue;
 import notaql.datamodel.ObjectValue;
 import notaql.datamodel.Value;
 import notaql.engines.Engine;
@@ -60,6 +61,7 @@ import java.util.stream.Collectors;
  */
 public class MongoDBEngineEvaluator implements EngineEvaluator {
     private final TransformationParser parser;
+    private final boolean noQuery;
     private Engine engine;
 
     private String databaseName;
@@ -74,7 +76,7 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
         this.engine = engine;
         this.parser = parser;
 
-        if (!params.keySet().equals(new HashSet<>(engine.getArguments())))
+        if(!params.containsKey("database_name") || !params.containsKey("collection_name"))
             throw new EvaluationException(
                     "MongoDB engine expects the following parameters on initialization: " +
                             engine.getArguments().stream().collect(Collectors.joining(", "))
@@ -82,6 +84,7 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
 
         this.databaseName = params.get("database_name").getValue().toString();
         this.collectionName = params.get("collection_name").getValue().toString();
+        this.noQuery = (Boolean)params.getOrDefault("no_query", new BooleanValue(false)).getValue();
     }
 
 
@@ -111,7 +114,7 @@ public class MongoDBEngineEvaluator implements EngineEvaluator {
         config.set("mongo.input.uri", mongoDBHost + databaseName + "." + collectionName);
 
         // add partial filter to query in mongodb
-        if(transformation.getInPredicate() != null) {
+        if(!noQuery && transformation.getInPredicate() != null) {
             final BSONObject query = FilterTranslator.toMongoDBQuery(transformation.getInPredicate());
             logger.info("Sending query to MongoDB: " + query.toString());
             config.set("mongo.input.query", query.toString());

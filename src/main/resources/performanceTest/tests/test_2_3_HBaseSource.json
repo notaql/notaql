@@ -3,7 +3,7 @@
     "name": "hbase->mongo",
     "IN-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reduced"
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "mongodb",
@@ -16,11 +16,12 @@
     "name": "hbase->hbase",
     "IN-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reduced"
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reducedout2HBaseSource"
+      "table_id": "nobench_10_reducedout2HBaseSource",
+      "all_default": true
     },
     "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._r, OUT.$(IN._c) <- IN._v;"
   },
@@ -28,7 +29,7 @@
     "name": "hbase->redis",
     "IN-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reduced"
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "redis",
@@ -40,7 +41,7 @@
     "name": "hbase->csv",
     "IN-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reduced"
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "csv",
@@ -52,7 +53,7 @@
     "name": "hbase->json",
     "IN-ENGINE": {
       "engine": "hbase",
-      "table_id": "nobench_10_reduced"
+      "table_id": "nobench_10_newreduced"
     },
     "OUT-ENGINE": {
       "engine": "json",
