@@ -17,13 +17,13 @@
 package notaql.performance;
 
 import notaql.NotaQL;
+import org.apache.commons.cli.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.*;
 import java.time.Duration;
 import java.time.Instant;
@@ -38,13 +38,30 @@ public class PerformanceTest {
     private static final String BASE_PATH = "/performanceTest/tests";
     private static final int RUNS = 5;
 
-    public static void main(String... args) throws IOException, URISyntaxException {
-        if (args.length > 0 && args[0].startsWith("--config=")) {
+    private static String inEngine = null;
+    private static String outEngine = null;
+    private static String testCase = null;
 
-            final String path = args[0].substring(args[0].indexOf("=") + 1);
+    public static void main(String... args) throws IOException, URISyntaxException, ParseException {
+        final Options options = new Options();
+        options.addOption("c", "config", true, "The notaql config file.");
+        options.addOption("i", "inengine", true, "Execute for certain input engines");
+        options.addOption("o", "outengine", true, "Execute for certain output engines");
+        options.addOption("t", "test", true, "Execute certain test case only");
+
+        final CommandLineParser parser = new DefaultParser();
+        final CommandLine cmd = parser.parse(options, args);
+
+        if (cmd.hasOption("config")) {
+
+            final String path = cmd.getOptionValue("config");
 
             NotaQL.loadConfig(path);
         }
+
+        inEngine = cmd.getOptionValue("inengine");
+        outEngine = cmd.getOptionValue("outengine");
+        testCase = cmd.getOptionValue("test");
 
         runTests();
     }
@@ -65,6 +82,9 @@ public class PerformanceTest {
         List<String> csv = new LinkedList<>();
 
         for (Path test : tests) {
+            if(testCase != null && !test.getFileName().toString().equals(testCase))
+                continue;
+
             final List<JSONObject> transformations = readArray(test);
 
             csv.add(test.getFileName().toString());
@@ -74,6 +94,9 @@ public class PerformanceTest {
             for (JSONObject transformation : transformations) {
                 final String name = transformation.getString("name");
                 final String notaqlTransformation = composeTransformation(transformation);
+
+                if(!transformation.getJSONObject("IN-ENGINE").getString("engine").equals(inEngine) && !transformation.getJSONObject("OUT-ENGINE").getString("engine").equals(outEngine))
+                    continue;
 
                 System.out.println("Evaluation test ("+ i++ +"/"+ transformations.size() +"): " + test.getFileName() + ": " + name);
 
