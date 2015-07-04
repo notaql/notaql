@@ -1,0 +1,17 @@
+[
+  {
+    "_id" : "a",
+    "sparse_601" : "GBRDCMJQ",
+    "test" : "test"
+  },
+  {
+    "_id" : "b",
+    "sparse_601" : "GBRDCMJQ",
+    "test" : "test2"
+  },
+  {
+    "_id" : "e",
+    "sparse_601" : "GBRDCMJQ",
+    "test" : "test5"
+  }
+]

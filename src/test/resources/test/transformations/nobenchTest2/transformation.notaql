@@ -1,0 +1,3 @@
+IN-FILTER: IN.sparse_601 = 'GBRDCMJQ',
+OUT._id <- IN._id,
+OUT.$(IN.*.name()) <- IN.@;
