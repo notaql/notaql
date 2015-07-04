@@ -79,7 +79,7 @@ public class PerformanceTest {
 
                 List<Duration> durations = new LinkedList<>();
 
-                for(i = 0; i < RUNS; i++) {
+                for(int j = 0; j < RUNS; j++) {
                     clean(transformation);
 
                     final Instant startTime = Instant.now();
