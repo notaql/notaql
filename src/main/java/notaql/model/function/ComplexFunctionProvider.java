@@ -16,9 +16,39 @@
 
 package notaql.model.function;
 
+import notaql.engines.Engine;
+import notaql.evaluation.Evaluator;
+
+import java.util.List;
+
 /**
  * Provides complex functions which may deeply influence the evaluation process.
  */
 public interface ComplexFunctionProvider {
+    /**
+     * Provides the function name (used in the NotaQL transformations)
+     * @return
+     */
     public String getName();
+
+    /**
+     * Provides the parameters that the function accepts.
+     * TODO: Every usage of this function is checked for correctness in terms of parameters (i.e. type checks and number of parameters)
+     * @return
+     */
+    public List<Parameter> getParameters();
+
+    /**
+     * Tells if the function can be used with the given in and out engines
+     * @param inEngine
+     * @param outEngine
+     * @return
+     */
+    public boolean isApplicable(Engine inEngine, Engine outEngine);
+
+    /**
+     * Provides the evaluator for this function
+     * @return
+     */
+    public Evaluator getEvaluator();
 }
