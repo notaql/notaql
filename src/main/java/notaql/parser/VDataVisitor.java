@@ -16,17 +16,14 @@
 
 package notaql.parser;
 
-import notaql.model.AttributeSpecification;
 import notaql.model.EvaluationException;
+import notaql.model.function.Argument;
 import notaql.model.path.InputPath;
-import notaql.model.path.OutputPath;
 import notaql.model.vdata.*;
-import notaql.model.vdata.aggregation.*;
 import notaql.parser.antlr.NotaQL2BaseVisitor;
 import notaql.parser.antlr.NotaQL2Parser;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,85 +85,14 @@ public class VDataVisitor extends NotaQL2BaseVisitor<VData> {
     }
 
     @Override
-    public VData visitAggregateVData(@NotNull NotaQL2Parser.AggregateVDataContext ctx) {
-        final NotaQL2Parser.AggregationFunctionContext aggrCtx = ctx.aggregationFunction();
-        // TODO: could be more generic
-        switch (aggrCtx.function.getType()) {
-            case NotaQL2Parser.SUM:
-                return new SumVData(visit(aggrCtx.vData()));
-            case NotaQL2Parser.AVG:
-                return new AvgVData(visit(aggrCtx.vData()));
-            case NotaQL2Parser.MIN:
-                return new ExtremumVData(visit(aggrCtx.vData()), ExtremumVData.Function.MIN);
-            case NotaQL2Parser.MAX:
-                return new ExtremumVData(visit(aggrCtx.vData()), ExtremumVData.Function.MAX);
-            case NotaQL2Parser.COUNT:
-                return new CountVData();
-            case NotaQL2Parser.IMPLODE:
-                return new ImplodeVData(visit(aggrCtx.vData()));
-            case NotaQL2Parser.LIST:
-                return new ListVData(visit(aggrCtx.vData()));
-        }
-
-        throw new EvaluationException("Unknown aggregation function operator: " + NotaQL2Parser.tokenNames[aggrCtx.function.getType()]);
-    }
-
-    @Override
-    public VData visitConstructorVData(@NotNull NotaQL2Parser.ConstructorVDataContext ctx) {
-        return visit(ctx.constructorFunction());
-    }
-
-    @Override
-    public VData visitObjectConstructorFunction(@NotNull NotaQL2Parser.ObjectConstructorFunctionContext ctx) {
-        final List<AttributeSpecification> specifications = new LinkedList<>();
-
-        for (NotaQL2Parser.AttributeSpecificationContext specificationCtx : ctx.attributeSpecification()) {
-            final OutputPath outputPath = transformationParser.getOutputPathVisitor().visit(specificationCtx.genericOutputPath());
-            final VData vData = visit(specificationCtx.vData());
-
-            specifications.add(new AttributeSpecification(outputPath, vData));
-        }
-
-        return new ObjectVData(specifications);
-    }
-
-    @Override
-    public VData visitGenericConstructorFunction(@NotNull NotaQL2Parser.GenericConstructorFunctionContext ctx) {
-        final ConstructorVData constructor = transformationParser.getOutEngineEvaluator().getConstructor(ctx.Name().getText());
-        if(constructor == null)
-            throw new EvaluationException("Unknown constructor: " + ctx.Name().getText());
-
-        final List<AttributeSpecification> specifications = new LinkedList<>();
-
-        for (NotaQL2Parser.AttributeSpecificationContext specificationCtx : ctx.attributeSpecification()) {
-            final OutputPath outputPath = transformationParser.getOutputPathVisitor().visit(specificationCtx.genericOutputPath());
-            final VData vData = visit(specificationCtx.vData());
-
-            specifications.add(new AttributeSpecification(outputPath, vData));
-        }
-
-        constructor.init(specifications.toArray(new AttributeSpecification[specifications.size()]));
-
-        return constructor;
-    }
-
-    @Override
     public VData visitGenericFunction(@NotNull NotaQL2Parser.GenericFunctionContext ctx) {
-        // TODO: make the functions in the in and out engines pluggable as well; Also generify AVG, etc..
-        FunctionVData function = transformationParser.getInEngineEvaluator().getFunction(ctx.Name().getText());
-        if(function == null)
-            function = transformationParser.getOutEngineEvaluator().getFunction(ctx.Name().getText());
+        final List<Argument> arguments = ctx.argument().stream()
+                .map(a -> transformationParser.getArgumentVisitor().visit(a))
+                .collect(Collectors.toList());
 
-        final List<VData> vDatas = ctx.vData().stream().map(this::visit).collect(Collectors.toList());
-
-        final VData[] vDataArray = vDatas.toArray(new VData[vDatas.size()]);
-        if(function != null) {
-            function.init(vDataArray);
-            return function;
-        }
-
-        return new GenericFunctionVData(ctx.Name().getText(), vDataArray);
+        return new GenericFunctionVData(ctx.Name().getText(), arguments);
     }
+
 
     @Override
     public VData visitRelativeInputPathVData(@NotNull NotaQL2Parser.RelativeInputPathVDataContext ctx) {

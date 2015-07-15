@@ -34,8 +34,8 @@ public class MongoDBInputPathStepVisitor extends NotaQL2DocumentInBaseVisitor<In
     }
 
     @Override
-    public InputPathStep visitAttributeIdStep(@NotNull NotaQL2DocumentInParser.AttributeIdStepContext ctx) {
-        return new IdStep<>(new Step<>(ctx.attributeId().attributeName.getText()));
+    public InputPathStep visitFieldIdStep(@NotNull NotaQL2DocumentInParser.FieldIdStepContext ctx) {
+        return new IdStep<>(new Step<>(ctx.fieldId().fieldName.getText()));
     }
 
     @Override

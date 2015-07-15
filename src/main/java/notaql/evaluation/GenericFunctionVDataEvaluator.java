@@ -16,11 +16,13 @@
 
 package notaql.evaluation;
 
+import com.google.common.collect.Sets;
+import notaql.NotaQL;
 import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
 import notaql.model.EvaluationException;
-import notaql.model.function.SimpleFunctionProvider;
-import notaql.model.function.SimpleFunction;
+import notaql.model.NotaQLException;
+import notaql.model.function.*;
 import notaql.model.vdata.GenericFunctionVData;
 import notaql.model.vdata.VData;
 
@@ -31,32 +33,112 @@ import java.util.*;
 /**
  * This evaluates generic functions. Right now this just supports simple functions
  * (because they are currently the only pluggable functions).
- *
- * TODO: Make sure to translate all other functions to reduce this weird inconsistent state
  */
 public class GenericFunctionVDataEvaluator implements Evaluator {
-
     private Map<String, Method> simpleFunctions = new HashMap<>();
+    private Map<String, ComplexFunctionProvider> complexFunctions = new HashMap<>();
 
     /**
      * Grabs all functions that are available
      */
     public GenericFunctionVDataEvaluator() {
+        loadSimpleFunctions();
+        loadComplexFunctions();
+
+        validateFunctions();
+    }
+
+    private void loadSimpleFunctions() {
         final ServiceLoader<SimpleFunctionProvider> functionProviderLoader = ServiceLoader.load(SimpleFunctionProvider.class);
 
-        // extract all simpleFunctions from the classes
+        // extract all simple functions from the classes
         for (SimpleFunctionProvider simpleFunctionProvider : functionProviderLoader) {
             for (Method method : simpleFunctionProvider.getClass().getMethods()) {
                 final SimpleFunction annotation = method.getAnnotation(SimpleFunction.class);
                 if(annotation == null)
                     continue;
 
-                // make sure that the return type is okay
-                if(!Value.class.isAssignableFrom(method.getReturnType())) {
-                    throw new AssertionError("Method " + annotation.name() + " has invalid return type");
+                final Method prev = simpleFunctions.put(annotation.name(), method);
+
+                // check if there was a name clash
+                if(prev != null)
+                    throw new NotaQLException(
+                            String.format("The function '%1$s' was discovered twice during the loading process.", annotation.name())
+                    );
+            }
+        }
+    }
+
+    private void loadComplexFunctions() {
+        final ServiceLoader<ComplexFunctionProvider> functionProviderLoader = ServiceLoader.load(ComplexFunctionProvider.class);
+
+        // extract all complex functions from the classes
+        for (ComplexFunctionProvider complexFunctionProvider : functionProviderLoader) {
+            final ComplexFunctionProvider prev = complexFunctions.put(complexFunctionProvider.getName(), complexFunctionProvider);
+
+            // check if there was a name clash
+            if(prev != null)
+                throw new NotaQLException(
+                        String.format("The function '%1$s' was discovered twice during the loading process.", prev.getName())
+                );
+        }
+    }
+
+    private void validateFunctions() {
+        // check if there was a name clash
+        final Sets.SetView<String> duplicateFunctions = Sets.intersection(simpleFunctions.keySet(), complexFunctions.keySet());
+        if(!duplicateFunctions.isEmpty())
+            throw new NotaQLException(
+                    String.format("The functions '%1$s' were discovered twice during the loading process.", duplicateFunctions.toString())
+            );
+
+        validateSimpleFunctions();
+        validateComplexFunctions();
+    }
+
+    private void validateSimpleFunctions() {
+        for (Map.Entry<String, Method> simpleFunction : simpleFunctions.entrySet()) {
+            final String name = simpleFunction.getKey();
+            final Method method = simpleFunction.getValue();
+
+            if(!Value.class.isAssignableFrom(method.getReturnType())) {
+                throw new NotaQLException("Method " + name + " has invalid return type");
+            }
+
+            // TODO: some checking still missing
+        }
+    }
+
+    /**
+     * Checks that the following properties:
+     * - Values with default values come after the ones without
+     * - Varargs are come last
+     */
+    private void validateComplexFunctions() {
+        for (Map.Entry<String, ComplexFunctionProvider> complexFunction : complexFunctions.entrySet()) {
+            final String name = complexFunction.getKey();
+            final ComplexFunctionProvider provider = complexFunction.getValue();
+
+            boolean foundDefault = false;
+            boolean foundVArgs = false;
+
+            for (Parameter parameter : provider.getParameters()) {
+                if(foundVArgs) {
+                    throw new NotaQLException(
+                            String.format("The function '%1$s' has vargs that do not come last.", name)
+                    );
                 }
 
-                simpleFunctions.put(annotation.name(), method);
+                if(parameter.getDefaultValue() != null) {
+                    foundDefault = true;
+                } else if(foundDefault) {
+                    throw new NotaQLException(
+                            String.format("The function '%1$s' has non-default argument following default argument.", name)
+                    );
+                }
+                if(parameter.isVarArg()) {
+                    foundVArgs = true;
+                }
             }
         }
     }
@@ -79,7 +161,7 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
         if(method == null)
             throw new EvaluationException(functionVData.getName() + " is an unknown function.");
 
-        final VData[] args = functionVData.getArgs();
+        final List<Argument> args = functionVData.getArgs();
         final List<List<ValueEvaluationResult>> results = new LinkedList<>();
 
         if(args.length < method.getParameterCount())

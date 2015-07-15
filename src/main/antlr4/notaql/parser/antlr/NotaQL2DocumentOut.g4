@@ -22,7 +22,7 @@ outputPath: outputPathStep ('.' outputPathStep)*;
 outputPathStep:  outputAttributeStep;
 
 outputAttributeStep
-    : attributeId           #attributeIdOutputAttributeStep
+    : fieldId               #fieldIdOutputAttributeStep
     | Id                    #idOutputAttributeStep
     | resolvedAttributeId   #resolvedOutputAttributeStep
     ;

@@ -57,19 +57,4 @@ public interface EngineEvaluator {
      */
     public void store(JavaRDD<ObjectValue> result);
 
-    /**
-     * Provides an instance of a constructor of the given name
-     *
-     * @param name
-     * @return a new instance or null if unsupported
-     */
-    public ConstructorVData getConstructor(String name);
-
-    /**
-     * Provides an instance of a function of the given name
-     *
-     * @param name
-     * @return a new instance or null if unsupported
-     */
-    public FunctionVData getFunction(String name);
 }

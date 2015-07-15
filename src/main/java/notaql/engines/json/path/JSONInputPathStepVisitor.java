@@ -34,8 +34,8 @@ public class JSONInputPathStepVisitor extends NotaQL2DocumentInBaseVisitor<Input
     }
 
     @Override
-    public InputPathStep visitAttributeIdStep(@NotNull NotaQL2DocumentInParser.AttributeIdStepContext ctx) {
-        return new IdStep<>(new Step<>(ctx.attributeId().attributeName.getText()));
+    public InputPathStep visitFieldIdStep(@NotNull NotaQL2DocumentInParser.FieldIdStepContext ctx) {
+        return new IdStep<>(new Step<>(ctx.fieldId().fieldName.getText()));
     }
 
     @Override

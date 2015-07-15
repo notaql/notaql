@@ -16,6 +16,7 @@
 
 package notaql.parser;
 
+import com.sun.org.apache.xpath.internal.Arg;
 import notaql.datamodel.AtomValue;
 import notaql.engines.Engine;
 import notaql.engines.EngineEvaluator;
@@ -43,6 +44,7 @@ public class TransformationParser {
     private final EngineEvaluator outEngineEvaluator;
 
     private final AtomValueVisitor atomValueVisitor;
+    private final ArgumentVisitor argumentVisitor;
     private final InputPathVisitor inputPathVisitor;
     private final OutputPathVisitor outputPathVisitor;
     private final PredicateVisitor predicateVisitor;
@@ -53,6 +55,7 @@ public class TransformationParser {
 
         // create all visitors necessary to parse stuff
         this.atomValueVisitor = new AtomValueVisitor(this);
+        this.argumentVisitor = new ArgumentVisitor(this);
         this.inputPathVisitor = new InputPathVisitor(this);
         this.outputPathVisitor = new OutputPathVisitor(this);
         this.predicateVisitor = new PredicateVisitor(this);
@@ -71,7 +74,7 @@ public class TransformationParser {
 
         final List<AttributeSpecification> specifications = new LinkedList<>();
 
-        for (NotaQL2Parser.AttributeSpecificationContext specificationCtx : transformationContext.attributeSpecification()) {
+        for (NotaQL2Parser.OutputMappingSpecificationContext specificationCtx : transformationContext.outputMappingSpecification()) {
             final OutputPath outputPath = getOutputPathVisitor().visit(specificationCtx.genericOutputPath());
             final VData vData = getVDataVisitor().visit(specificationCtx.vData());
 
@@ -169,6 +172,10 @@ public class TransformationParser {
 
     public AtomValueVisitor getAtomValueVisitor() {
         return atomValueVisitor;
+    }
+
+    public ArgumentVisitor getArgumentVisitor() {
+        return argumentVisitor;
     }
 
     public InputPathVisitor getInputPathVisitor() {

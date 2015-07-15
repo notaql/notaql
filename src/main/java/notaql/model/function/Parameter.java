@@ -16,10 +16,12 @@
 
 package notaql.model.function;
 
+import notaql.datamodel.Value;
+
 /**
  * Represents a parameter
  */
-public class Parameter<T> {
+public class Parameter<T extends Value> {
     private String name;
     private Class<T> type;
     private T defaultValue = null;

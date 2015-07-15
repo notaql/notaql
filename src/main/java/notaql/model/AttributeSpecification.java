@@ -23,6 +23,8 @@ import java.io.Serializable;
 
 /**
  * Created by thomas on 17.11.14.
+ *
+ * FIXME: still necessary?
  */
 public class AttributeSpecification implements Serializable {
     private static final long serialVersionUID = 7276769913257427685L;

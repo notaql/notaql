@@ -49,16 +49,6 @@ Float: [0-9]+ '.' [0-9]+;
 
 String: '\'' ~('\r' | '\n' | '\'')* '\'';
 
-AVG: 'AVG';
-COUNT: 'COUNT';
-MAX: 'MAX';
-MIN: 'MIN';
-SUM: 'SUM';
-IMPLODE: 'IMPLODE';
-
-LIST: 'LIST';
-OBJECT: 'OBJECT';
-
 Name: [a-zA-Z0-9_]+;
 
 OPEN: '(';

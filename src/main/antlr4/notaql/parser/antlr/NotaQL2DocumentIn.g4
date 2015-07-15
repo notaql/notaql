@@ -29,7 +29,7 @@ inputPathStep
 attributeStep
     : IdToken               #idStep
     | SplitToken            #splitNameStep // This fixes the bug that some attributes may be named "split"
-    | attributeId           #attributeIdStep
+    | fieldId               #fieldIdStep
     | genericStep           #genericAttributeStep
     ;
 

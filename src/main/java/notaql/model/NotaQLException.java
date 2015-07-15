@@ -19,21 +19,21 @@ package notaql.model;
 /**
  * Created by thomas on 17.11.14.
  */
-public class EvaluationException extends NotaQLException {
-    private static final long serialVersionUID = 2922434994538507144L;
+public class NotaQLException extends RuntimeException {
+    private static final long serialVersionUID = -1640781755196667418L;
 
-    public EvaluationException() {
+    public NotaQLException() {
     }
 
-    public EvaluationException(String message) {
+    public NotaQLException(String message) {
         super(message);
     }
 
-    public EvaluationException(String message, Throwable cause) {
+    public NotaQLException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public EvaluationException(Throwable cause) {
+    public NotaQLException(Throwable cause) {
         super(cause);
     }
 }

@@ -16,14 +16,18 @@
 
 package notaql.model.vdata;
 
+import notaql.model.function.Argument;
+
+import java.util.List;
+
 /**
  * Created by thomas on 22.03.15.
  */
 public class GenericFunctionVData implements  VData {
     private final String name;
-    private final VData[] args;
+    private final List<Argument> args;
 
-    public GenericFunctionVData(String name, VData... args) {
+    public GenericFunctionVData(String name, List<Argument> args) {
         this.name = name;
         this.args = args;
     }
@@ -32,7 +36,7 @@ public class GenericFunctionVData implements  VData {
         return name;
     }
 
-    public VData[] getArgs() {
+    public List<Argument> getArgs() {
         return args;
     }
 }

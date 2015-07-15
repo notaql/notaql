@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-package notaql.model;
+package notaql.model.function;
+
+import notaql.model.vdata.VData;
 
 /**
- * Created by thomas on 17.11.14.
+ * Represents an instance of a parameter (TODO: machen)
  */
-public class EvaluationException extends NotaQLException {
-    private static final long serialVersionUID = 2922434994538507144L;
+public class Argument {
+    private String name = null;
+    private VData vData;
 
-    public EvaluationException() {
+    public Argument(VData vData) {
+        this.vData = vData;
     }
 
-    public EvaluationException(String message) {
-        super(message);
+    public Argument(String name, VData vData) {
+        this.name = name;
+        this.vData = vData;
     }
 
-    public EvaluationException(String message, Throwable cause) {
-        super(message, cause);
+    public String getName() {
+        return name;
     }
 
-    public EvaluationException(Throwable cause) {
-        super(cause);
+    public VData getVData() {
+        return vData;
     }
 }

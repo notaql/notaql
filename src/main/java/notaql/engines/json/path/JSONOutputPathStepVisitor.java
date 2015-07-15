@@ -37,10 +37,10 @@ public class JSONOutputPathStepVisitor extends NotaQL2DocumentOutBaseVisitor<Out
     }
 
     @Override
-    public OutputPathStep visitAttributeIdOutputAttributeStep(@NotNull NotaQL2DocumentOutParser.AttributeIdOutputAttributeStepContext ctx) {
-        if(ctx.attributeId().attributeName.getText().equals("_"))
+    public OutputPathStep visitFieldIdOutputAttributeStep(@NotNull NotaQL2DocumentOutParser.FieldIdOutputAttributeStepContext ctx) {
+        if(ctx.fieldId().fieldName.getText().equals("_"))
             return new IgnoredIdStep();
-        return new IdStep<>(new Step<>(ctx.attributeId().attributeName.getText()));
+        return new IdStep<>(new Step<>(ctx.fieldId().fieldName.getText()));
     }
 
     @Override

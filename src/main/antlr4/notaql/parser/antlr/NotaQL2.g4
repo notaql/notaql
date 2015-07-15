@@ -25,16 +25,16 @@ notaql: (transformation  ';')* transformation ';'? EOF;
 
 /**
 A transformation consists of input and output engine,
-optional input and output filters, and some attribute specifications
+optional input and output filters, and some field specifications
 */
 transformation: inEngine ','
                 outEngine ','
                 (inPredicate ',')?
                 (outPredicate ',')?
-                attributeSpecification (',' attributeSpecification)*;
+                outputMappingSpecification (',' outputMappingSpecification)*;
 
 /**
-Input and output engines are composed by the key word IN-ENGINE/OUT-ENGINE followed by a keyword attribute list
+Input and output engines are composed by the key word IN-ENGINE/OUT-ENGINE followed by a keyword parameter list
 */
 inEngine: 'IN-ENGINE:' engine;
 outEngine: 'OUT-ENGINE:' engine;
@@ -42,10 +42,17 @@ outEngine: 'OUT-ENGINE:' engine;
 engine: engineName=Name '(' (Name '<-' atom (',' Name '<-' atom)*)? ')';
 
 /**
-An attribute specification consistes of an output path and an arbitrary vData expression
+An output mapping specification consists of an output path and an arbitrary vData expression
 */
-attributeSpecification
+outputMappingSpecification
     : genericOutputPath ARROW vData
+    ;
+
+/**
+A field specification consists of a field name and an arbitrary vData expression
+*/
+fieldSpecification
+    : Name ARROW vData
     ;
 
 /**
@@ -113,23 +120,19 @@ vData
     | '(' vData ')'                 #bracedVData
     | vData op=(STAR|DIV) vData     #multiplicatedVData
     | vData op=(PLUS|MINUS) vData   #addedVData
-    | aggregationFunction           #aggregateVData
-    | constructorFunction           #constructorVData
     | genericFunction               #genericFunctionVData
     | absoluteInputPath             #absoluteInputPathVData
     | relativeInputPath             #relativeInputPathVData
     ;
 
-aggregationFunction
-    : function=(SUM | AVG | MIN | MAX | COUNT | IMPLODE | LIST) '(' vData? (',' atom)* ')'
+genericFunction
+    : Name '(' (argument (',' argument)*)? ')'
     ;
 
-constructorFunction
-    : OBJECT '(' attributeSpecification (',' attributeSpecification)* ')'   #objectConstructorFunction
-    | Name '(' attributeSpecification (',' attributeSpecification)* ')'     #genericConstructorFunction
+argument
+    : vData                 #vDataArgument
+    | fieldSpecification    #fieldSpecificationArgument
     ;
-
-genericFunction: Name '(' (vData (',' vData)*)? ')';
 
 standalonePredicate
     : predicate EOF
@@ -168,6 +171,6 @@ atom
     | FALSE             #falseAtom
     ;
 
-attributeId: attributeName = Name;
+fieldId: fieldName = Name;
 
 index: indexNumber = Int;
