@@ -49,7 +49,7 @@ public class PerformanceTest {
         options.addOption("o", "outengine", true, "Execute for certain output engines");
         options.addOption("t", "test", true, "Execute certain test case only");
 
-        final CommandLineParser parser = new DefaultParser();
+        final CommandLineParser parser = new PosixParser();
         final CommandLine cmd = parser.parse(options, args);
 
         if (cmd.hasOption("config")) {
@@ -95,7 +95,7 @@ public class PerformanceTest {
                 final String name = transformation.getString("name");
                 final String notaqlTransformation = composeTransformation(transformation);
 
-                if(!transformation.getJSONObject("IN-ENGINE").getString("engine").equals(inEngine) && !transformation.getJSONObject("OUT-ENGINE").getString("engine").equals(outEngine))
+                if(!(inEngine == null && outEngine == null || inEngine != null && transformation.getJSONObject("IN-ENGINE").getString("engine").equals(inEngine) || outEngine != null && transformation.getJSONObject("OUT-ENGINE").getString("engine").equals(outEngine)))
                     continue;
 
                 System.out.println("Evaluation test ("+ i++ +"/"+ transformations.size() +"): " + test.getFileName() + ": " + name);

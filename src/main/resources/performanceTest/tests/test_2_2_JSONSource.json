@@ -10,7 +10,7 @@
       "database_name": "test",
       "collection_name": "nobench_10_reducedout2JSONSource"
     },
-    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._r, OUT.$(IN.*.name()) <- IN.@;"
   },
   {
     "name": "json->hbase",
@@ -23,7 +23,7 @@
       "table_id": "nobench_10_reducedout2JSONSource",
       "all_default": true
     },
-    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._r, OUT.$(IN.*.name()) <- IN.@;"
   },
   {
     "name": "json->redis",
@@ -35,7 +35,7 @@
       "engine": "redis",
       "database_id": "6"
     },
-    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._k <- IN._r, OUT.$(IN.*.name()) <- IN.@;"
   },
   {
     "name": "json->csv",
@@ -47,7 +47,7 @@
       "engine": "csv",
       "csv_path": "/home/notaql/perf/nobench_10_reducedout2JSONSource.csv"
     },
-    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._r <- IN._r, OUT.$(IN.*.name()) <- IN.@;"
   },
   {
     "name": "json->json",
@@ -59,6 +59,6 @@
       "engine": "json",
       "path": "/home/notaql/perf/nobench_10_reducedout2JSONSource.json"
     },
-    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._id, OUT.$(IN.*.name()) <- IN.@;"
+    "transformation": "IN-FILTER: IN.sparse_601 = 'GBRDCMJQ', OUT._id <- IN._r, OUT.$(IN.*.name()) <- IN.@;"
   }
 ]
