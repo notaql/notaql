@@ -18,6 +18,7 @@ package notaql.model.function;
 
 import notaql.engines.Engine;
 import notaql.evaluation.Evaluator;
+import notaql.evaluation.Reducer;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public interface ComplexFunctionProvider {
      * TODO: Every usage of this function is checked for correctness in terms of parameters (i.e. type checks and number of parameters)
      * @return
      */
-    public List<Parameter> getParameters();
+    public List<Parameter<?>> getParameters();
 
     /**
      * Tells if the function can be used with the given in and out engines
@@ -51,4 +52,10 @@ public interface ComplexFunctionProvider {
      * @return
      */
     public Evaluator getEvaluator();
+
+    /**
+     * Provides the reducer for this function
+     * @return
+     */
+    public Reducer getReducer();
 }

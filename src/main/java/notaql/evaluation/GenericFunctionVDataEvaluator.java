@@ -16,27 +16,23 @@
 
 package notaql.evaluation;
 
-import com.google.common.collect.Sets;
-import notaql.NotaQL;
 import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
-import notaql.model.EvaluationException;
 import notaql.model.NotaQLException;
 import notaql.model.function.*;
 import notaql.model.vdata.GenericFunctionVData;
 import notaql.model.vdata.VData;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * This evaluates generic functions. Right now this just supports simple functions
- * (because they are currently the only pluggable functions).
+ * This evaluates generic functions.
  */
-public class GenericFunctionVDataEvaluator implements Evaluator {
-    private Map<String, Method> simpleFunctions = new HashMap<>();
-    private Map<String, ComplexFunctionProvider> complexFunctions = new HashMap<>();
+public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
+    private static final long serialVersionUID = 9075850152674486434L;
+
+    private Map<String, ComplexFunctionProvider> functions = new HashMap<>();
 
     /**
      * Grabs all functions that are available
@@ -58,7 +54,10 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
                 if(annotation == null)
                     continue;
 
-                final Method prev = simpleFunctions.put(annotation.name(), method);
+                final ComplexFunctionProvider prev = functions.put(
+                        annotation.name(),
+                        new SimpleComplexFunctionProvider(annotation.name(), method)
+                );
 
                 // check if there was a name clash
                 if(prev != null)
@@ -74,7 +73,7 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
 
         // extract all complex functions from the classes
         for (ComplexFunctionProvider complexFunctionProvider : functionProviderLoader) {
-            final ComplexFunctionProvider prev = complexFunctions.put(complexFunctionProvider.getName(), complexFunctionProvider);
+            final ComplexFunctionProvider prev = functions.put(complexFunctionProvider.getName(), complexFunctionProvider);
 
             // check if there was a name clash
             if(prev != null)
@@ -84,38 +83,13 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
         }
     }
 
-    private void validateFunctions() {
-        // check if there was a name clash
-        final Sets.SetView<String> duplicateFunctions = Sets.intersection(simpleFunctions.keySet(), complexFunctions.keySet());
-        if(!duplicateFunctions.isEmpty())
-            throw new NotaQLException(
-                    String.format("The functions '%1$s' were discovered twice during the loading process.", duplicateFunctions.toString())
-            );
-
-        validateSimpleFunctions();
-        validateComplexFunctions();
-    }
-
-    private void validateSimpleFunctions() {
-        for (Map.Entry<String, Method> simpleFunction : simpleFunctions.entrySet()) {
-            final String name = simpleFunction.getKey();
-            final Method method = simpleFunction.getValue();
-
-            if(!Value.class.isAssignableFrom(method.getReturnType())) {
-                throw new NotaQLException("Method " + name + " has invalid return type");
-            }
-
-            // TODO: some checking still missing
-        }
-    }
-
     /**
      * Checks that the following properties:
      * - Values with default values come after the ones without
      * - Varargs are come last
      */
-    private void validateComplexFunctions() {
-        for (Map.Entry<String, ComplexFunctionProvider> complexFunction : complexFunctions.entrySet()) {
+    private void validateFunctions() {
+        for (Map.Entry<String, ComplexFunctionProvider> complexFunction : functions.entrySet()) {
             final String name = complexFunction.getKey();
             final ComplexFunctionProvider provider = complexFunction.getValue();
 
@@ -143,114 +117,52 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
         }
     }
 
-    /**
-     * Evaluates simple functions in the way, that all arguments are evaluated. In case one argument is ambiguous,
-     * we simply evaluate the function a couple of times.
-     * If more than one is ambiguous we throw an exception. A cross product would be possible, but as of now we did
-     * not encounter a real usecase for that.
-     *
-     * @param vData
-     * @param fixation
-     * @return
-     */
     @Override
     public List<ValueEvaluationResult> evaluate(VData vData, Fixation fixation) {
-        assert vData instanceof GenericFunctionVData;
-        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
-        final Method method = simpleFunctions.get(functionVData.getName());
-        if(method == null)
-            throw new EvaluationException(functionVData.getName() + " is an unknown function.");
-
-        final List<Argument> args = functionVData.getArgs();
-        final List<List<ValueEvaluationResult>> results = new LinkedList<>();
-
-        if(args.length < method.getParameterCount())
-            throw new EvaluationException(functionVData.getName() + " was provided with too few arguments.");
-
-        Fixation lastFixation = fixation;
-
-        // evaluate each argument
-        for (VData arg : args) {
-            final List<ValueEvaluationResult> evaluate = EvaluatorService.getInstance().evaluate(arg, lastFixation);
-            if(evaluate.size() > 0)
-                lastFixation = evaluate.get(evaluate.size() - 1).getFixation();
-            results.add(evaluate);
-        }
-
-        // make sure that at most one argument is ambigous.
-        int ambigous = -1;
-        int i = 0;
-        for (List<ValueEvaluationResult> result : results) {
-            if(result.size() > 1) {
-                if (ambigous > -1)
-                    throw new EvaluationException(functionVData.getName() + ": Two arguments were ambigous. This is not (yet) supported.");
-
-                ambigous = i;
-            }
-
-            i++;
-        }
-
-        final Iterator<List<ValueEvaluationResult>> iterator = results.iterator();
-
-        // check if types match
-        // TODO: add support for ... parameters
-        for (Class<?> aClass : method.getParameterTypes()) {
-            // guaranteed before
-            assert iterator.hasNext();
-
-            final List<ValueEvaluationResult> result = iterator.next();
-
-            // check if types match
-            for (ValueEvaluationResult evaluationResult : result) {
-                if(!aClass.isAssignableFrom(evaluationResult.getValue().getClass()))
-                    throw new EvaluationException(functionVData.getName() + " encountered wrong types");
-            }
-        }
-
-        Object[] params = new Object[results.size()];
-
-        // copy params
-        int j = 0;
-        for (List<ValueEvaluationResult> result : results) {
-            if(j != ambigous) {
-                params[j] = result.get(0).getValue();
-            }
-            j++;
-        }
-
-        final List<ValueEvaluationResult> returns = new LinkedList<>();
-
-        // invoke the function and store the results in results
-        try {
-            if(ambigous > -1) {
-                for (ValueEvaluationResult evaluationResult : results.get(ambigous)) {
-                    params[ambigous] = evaluationResult.getValue();
-                    final Object invoke = method.invoke(null, params);
-
-                    assert invoke instanceof Value;
-                    returns.add(new ValueEvaluationResult((Value)invoke, lastFixation));
-                }
-            } else {
-                final Object invoke = method.invoke(null, params);
-
-                assert invoke instanceof Value;
-                returns.add(new ValueEvaluationResult((Value)invoke, lastFixation));
-            }
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new EvaluationException("Method " + functionVData.getName() + " could not be invoked.", e);
-        }
-
-        return returns;
+        return getProvider(vData).getEvaluator().evaluate(vData, fixation);
     }
 
     @Override
     public boolean canReduce(VData vData) {
-        return false;
+        return getProvider(vData).getEvaluator().canReduce(vData);
     }
 
     @Override
     public List<Class<? extends VData>> getProcessedClasses() {
         return Arrays.asList(GenericFunctionVData.class);
+    }
+
+    @Override
+    public Value reduce(VData vData, Value v1, Value v2) {
+        final ComplexFunctionProvider provider = getProvider(vData);
+
+        assert provider.getReducer() != null;
+
+        return provider.getReducer().reduce(vData, v1, v2);
+    }
+
+    @Override
+    public Value createIdentity(VData vData) {
+        final ComplexFunctionProvider provider = getProvider(vData);
+
+        assert provider.getReducer() != null;
+
+        return provider.getReducer().createIdentity(vData);
+    }
+
+    @Override
+    public Value finalize(VData vData, Value value) {
+        final ComplexFunctionProvider provider = getProvider(vData);
+
+        assert provider.getReducer() != null;
+
+        return provider.getReducer().finalize(vData, value);
+    }
+
+    private ComplexFunctionProvider getProvider(VData vData) {
+        assert vData instanceof GenericFunctionVData;
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        return functions.get(functionVData.getName());
     }
 }
