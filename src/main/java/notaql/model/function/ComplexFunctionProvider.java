@@ -17,7 +17,8 @@
 package notaql.model.function;
 
 /**
- * Marker interface for classes which provide functions
+ * Provides complex functions which may deeply influence the evaluation process.
  */
-public interface FunctionProvider {
+public interface ComplexFunctionProvider {
+    public String getName();
 }

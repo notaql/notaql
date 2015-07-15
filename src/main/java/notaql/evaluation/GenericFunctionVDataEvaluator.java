@@ -19,7 +19,7 @@ package notaql.evaluation;
 import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
 import notaql.model.EvaluationException;
-import notaql.model.function.FunctionProvider;
+import notaql.model.function.SimpleFunctionProvider;
 import notaql.model.function.SimpleFunction;
 import notaql.model.vdata.GenericFunctionVData;
 import notaql.model.vdata.VData;
@@ -42,11 +42,11 @@ public class GenericFunctionVDataEvaluator implements Evaluator {
      * Grabs all functions that are available
      */
     public GenericFunctionVDataEvaluator() {
-        final ServiceLoader<FunctionProvider> functionProviderLoader = ServiceLoader.load(FunctionProvider.class);
+        final ServiceLoader<SimpleFunctionProvider> functionProviderLoader = ServiceLoader.load(SimpleFunctionProvider.class);
 
         // extract all simpleFunctions from the classes
-        for (FunctionProvider functionProvider : functionProviderLoader) {
-            for (Method method : functionProvider.getClass().getMethods()) {
+        for (SimpleFunctionProvider simpleFunctionProvider : functionProviderLoader) {
+            for (Method method : simpleFunctionProvider.getClass().getMethods()) {
                 final SimpleFunction annotation = method.getAnnotation(SimpleFunction.class);
                 if(annotation == null)
                     continue;

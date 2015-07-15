@@ -22,8 +22,8 @@ import notaql.datamodel.NumberValue;
 /**
  * Provides simple mathematical functions
  */
-@AutoService(FunctionProvider.class)
-public class MathFunctionProvider implements FunctionProvider {
+@AutoService(SimpleFunctionProvider.class)
+public class MathFunctionProvider implements SimpleFunctionProvider {
     @SimpleFunction(name="PI")
     public static NumberValue pi() {
         return new NumberValue(Math.PI);
