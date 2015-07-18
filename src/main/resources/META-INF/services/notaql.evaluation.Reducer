@@ -17,7 +17,7 @@
 notaql.evaluation.CountVDataEvaluator
 notaql.evaluation.ListVDataEvaluator
 notaql.evaluation.SumVDataEvaluator
-notaql.evaluation.ObjectVDataEvaluator
+notaql.evaluation.ObjectFunctionEvaluator
 notaql.evaluation.ImplodeVDataEvaluator
 notaql.evaluation.ArithmeticVDataEvaluator
 notaql.evaluation.BracedVDataEvaluator

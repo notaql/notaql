@@ -16,12 +16,12 @@
 
 package notaql.evaluation;
 
-import com.google.common.collect.Sets;
 import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
 import notaql.model.EvaluationException;
-import notaql.model.NotaQLException;
-import notaql.model.function.*;
+import notaql.model.function.Argument;
+import notaql.model.function.Arguments;
+import notaql.model.function.FunctionEvaluator;
 import notaql.model.vdata.GenericFunctionVData;
 import notaql.model.vdata.VData;
 
@@ -32,7 +32,7 @@ import java.util.*;
 /**
  * This evaluates simple functions.
  */
-public class SimpleFunctionVDataEvaluator implements Evaluator {
+public class SimpleFunctionVDataEvaluator implements FunctionEvaluator {
     private final String name;
     private final Method method;
 
@@ -47,25 +47,27 @@ public class SimpleFunctionVDataEvaluator implements Evaluator {
      * If more than one is ambiguous we throw an exception. A cross product would be possible, but as of now we did
      * not encounter a real usecase for that.
      *
-     * @param vData
+     * TODO: This is missing support for named arguments and varargs!
+     * FIXME: This assumes correct argument order and ignores keywords
+     *
+     * @param args
      * @param fixation
      * @return
      */
     @Override
-    public List<ValueEvaluationResult> evaluate(VData vData, Fixation fixation) {
-        assert vData instanceof GenericFunctionVData;
-        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+    public List<ValueEvaluationResult> evaluate(Arguments args, Fixation fixation) {
+        if(args.getVArgs().size() > 0)
+            throw new EvaluationException("Varargs are not yet supported for simple functions.");
 
-        final List<Argument> args = functionVData.getArgs();
         final List<List<ValueEvaluationResult>> results = new LinkedList<>();
 
-        if(args.size() < method.getParameterCount())
-            throw new EvaluationException(functionVData.getName() + " was provided with too few arguments.");
+        if(args.getKWArgs().size() != method.getParameterCount())
+            throw new EvaluationException(name + " was provided with the wrong amount of arguments.");
 
         Fixation lastFixation = fixation;
 
         // evaluate each argument
-        for (Argument arg : args) {
+        for (Argument arg : args.getKWArgs()) {
             final List<ValueEvaluationResult> evaluate = EvaluatorService.getInstance().evaluate(arg.getVData(), lastFixation);
             if(evaluate.size() > 0)
                 lastFixation = evaluate.get(evaluate.size() - 1).getFixation();
@@ -78,7 +80,7 @@ public class SimpleFunctionVDataEvaluator implements Evaluator {
         for (List<ValueEvaluationResult> result : results) {
             if(result.size() > 1) {
                 if (ambigous > -1)
-                    throw new EvaluationException(functionVData.getName() + ": Two arguments were ambigous. This is not (yet) supported.");
+                    throw new EvaluationException(name + ": Two arguments were ambigous. This is not (yet) supported.");
 
                 ambigous = i;
             }
@@ -99,7 +101,7 @@ public class SimpleFunctionVDataEvaluator implements Evaluator {
             // check if types match
             for (ValueEvaluationResult evaluationResult : result) {
                 if(!aClass.isAssignableFrom(evaluationResult.getValue().getClass()))
-                    throw new EvaluationException(functionVData.getName() + " encountered wrong types");
+                    throw new EvaluationException(name + " encountered wrong types");
             }
         }
 
@@ -133,19 +135,14 @@ public class SimpleFunctionVDataEvaluator implements Evaluator {
                 returns.add(new ValueEvaluationResult((Value)invoke, lastFixation));
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new EvaluationException("Method " + functionVData.getName() + " could not be invoked.", e);
+            throw new EvaluationException("Method " + name + " could not be invoked.", e);
         }
 
         return returns;
     }
 
     @Override
-    public boolean canReduce(VData vData) {
+    public boolean canReduce(Arguments args) {
         return false;
-    }
-
-    @Override
-    public List<Class<? extends VData>> getProcessedClasses() {
-        return Arrays.asList(GenericFunctionVData.class);
     }
 }

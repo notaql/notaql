@@ -73,12 +73,12 @@ public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
     }
 
     @Override
-    public Evaluator getEvaluator() {
+    public FunctionEvaluator getEvaluator() {
         return new SimpleFunctionVDataEvaluator(name, method);
     }
 
     @Override
-    public Reducer getReducer() {
+    public FunctionReducer getReducer() {
         return null;
     }
 }

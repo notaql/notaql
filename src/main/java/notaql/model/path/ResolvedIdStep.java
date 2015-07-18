@@ -99,4 +99,21 @@ public class ResolvedIdStep implements InputPathStep, OutputPathStep {
     public String toString() {
         return "$(" + (path!=null?path.toString():"null") + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResolvedIdStep that = (ResolvedIdStep) o;
+
+        if (path != null ? !path.equals(that.path) : that.path != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return path != null ? path.hashCode() : 0;
+    }
 }

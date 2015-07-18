@@ -42,4 +42,21 @@ public abstract class SimpleAggregatingVData<T extends Value> implements Aggrega
     public String toString() {
         return expression.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleAggregatingVData that = (SimpleAggregatingVData) o;
+
+        if (expression != null ? !expression.equals(that.expression) : that.expression != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return expression != null ? expression.hashCode() : 0;
+    }
 }

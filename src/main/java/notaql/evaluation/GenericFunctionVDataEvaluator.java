@@ -25,6 +25,7 @@ import notaql.model.vdata.VData;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This evaluates generic functions.
@@ -84,17 +85,33 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
     }
 
     private void validateFunctions() {
-        functions.values().stream().forEach(ComplexFunctionProvider.Validator::validate);
+        functions.values().stream().forEach(ComplexFunctionProvider.Resolver::validate);
     }
 
     @Override
     public List<ValueEvaluationResult> evaluate(VData vData, Fixation fixation) {
-        return getProvider(vData).getEvaluator().evaluate(vData, fixation);
+        assert vData instanceof GenericFunctionVData;
+
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        final ComplexFunctionProvider provider = getProvider(functionVData);
+
+        return provider.getEvaluator().evaluate(
+                ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
+                fixation
+        );
     }
 
     @Override
     public boolean canReduce(VData vData) {
-        return getProvider(vData).getEvaluator().canReduce(vData);
+        assert vData instanceof GenericFunctionVData;
+
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        final ComplexFunctionProvider provider = getProvider(functionVData);
+
+        return provider.getEvaluator()
+                .canReduce(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
     }
 
     @Override
@@ -104,35 +121,52 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
     @Override
     public Value reduce(VData vData, Value v1, Value v2) {
-        final ComplexFunctionProvider provider = getProvider(vData);
+        assert vData instanceof GenericFunctionVData;
+
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        final ComplexFunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
-        return provider.getReducer().reduce(vData, v1, v2);
+        return provider.getReducer()
+                .reduce(
+                        ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
+                        v1,
+                        v2
+                );
     }
 
     @Override
     public Value createIdentity(VData vData) {
-        final ComplexFunctionProvider provider = getProvider(vData);
+        assert vData instanceof GenericFunctionVData;
+
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        final ComplexFunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
-        return provider.getReducer().createIdentity(vData);
+        return provider.getReducer()
+                .createIdentity(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
     }
 
     @Override
     public Value finalize(VData vData, Value value) {
-        final ComplexFunctionProvider provider = getProvider(vData);
+        assert vData instanceof GenericFunctionVData;
+
+        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
+
+        final ComplexFunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
-        return provider.getReducer().finalize(vData, value);
+        return provider.getReducer().finalize(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()), value);
     }
 
-    private ComplexFunctionProvider getProvider(VData vData) {
-        assert vData instanceof GenericFunctionVData;
-        final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
-
-        return functions.get(functionVData.getName());
+    private ComplexFunctionProvider getProvider(GenericFunctionVData vData) {
+        return functions.get(vData.getName());
     }
+
+
 }

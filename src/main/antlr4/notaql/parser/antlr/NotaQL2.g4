@@ -49,10 +49,11 @@ outputMappingSpecification
     ;
 
 /**
-A field specification consists of a field name and an arbitrary vData expression
+A parameter name may be either constant or resolved
 */
-fieldSpecification
-    : Name ARROW vData
+attributeName
+    : Name          #constantAttributeName
+    | '$' '(' absoluteInputPath ')'  #resolvedAttributeName
     ;
 
 /**
@@ -130,8 +131,8 @@ genericFunction
     ;
 
 argument
-    : vData                 #vDataArgument
-    | fieldSpecification    #fieldSpecificationArgument
+    : vData                         #vDataArgument
+    | attributeName ARROW vData     #namedArgument
     ;
 
 standalonePredicate

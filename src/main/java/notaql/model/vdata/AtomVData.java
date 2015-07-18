@@ -39,4 +39,21 @@ public class AtomVData implements VData {
     public String toString() {
         return value.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AtomVData atomVData = (AtomVData) o;
+
+        if (value != null ? !value.equals(atomVData.value) : atomVData.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
 }

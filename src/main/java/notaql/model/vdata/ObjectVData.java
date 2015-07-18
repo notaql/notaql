@@ -47,6 +47,10 @@ public class ObjectVData implements ConstructorVData {
         this.specifications = Arrays.asList(specifications);
     }
 
+    public List<AttributeSpecification> getSpecifications() {
+        return this.specifications;
+    }
+
     @Override
     public String toString() {
         final String join = specifications
@@ -56,7 +60,21 @@ public class ObjectVData implements ConstructorVData {
         return "OBJECT(\n" + join + "\n)";
     }
 
-    public List<AttributeSpecification> getSpecifications() {
-        return this.specifications;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ObjectVData that = (ObjectVData) o;
+
+        if (specifications != null ? !specifications.equals(that.specifications) : that.specifications != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return specifications != null ? specifications.hashCode() : 0;
     }
 }

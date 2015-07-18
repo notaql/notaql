@@ -35,4 +35,21 @@ public class BracedVData implements VData {
     public String toString() {
         return "(" + vData.toString() + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BracedVData that = (BracedVData) o;
+
+        if (vData != null ? !vData.equals(that.vData) : that.vData != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return vData != null ? vData.hashCode() : 0;
+    }
 }

@@ -22,8 +22,13 @@ import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
 import notaql.model.AttributeSpecification;
 import notaql.model.EvaluationException;
+import notaql.model.function.Argument;
+import notaql.model.function.Arguments;
+import notaql.model.function.FunctionEvaluator;
+import notaql.model.function.FunctionReducer;
 import notaql.model.path.IgnoredIdStep;
 import notaql.model.path.StepNameEvaluationResult;
+import notaql.model.vdata.GenericFunctionVData;
 import notaql.model.vdata.ObjectVData;
 import notaql.evaluation.values.PartialObjectValue;
 import notaql.model.vdata.VData;
@@ -34,6 +39,7 @@ import scala.Tuple2;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the most complex evaluator in the whole project.
@@ -43,21 +49,22 @@ import java.util.List;
  *
  * Every evaluation of ObjectVData starts by simply providing a "PartialObjectValue" which is then later
  * resolved into an "ObjectValue".
+ *
+ * FIXME: Transformations are probably broken now!
+ * FIXME: AGGREGATINGOBJECTVDATA SUPPORT MISSING!
  */
-public class ObjectVDataEvaluator implements Evaluator, Reducer {
+public class ObjectFunctionEvaluator implements FunctionEvaluator, FunctionReducer {
     private static final long serialVersionUID = 2062262076467699656L;
 
     @Override
-    public List<ValueEvaluationResult> evaluate(VData vData, Fixation fixation) {
-        assert vData instanceof ObjectVData;
-
-        final List<AttributeSpecification> specifications = ((ObjectVData) vData).getSpecifications();
+    public List<ValueEvaluationResult> evaluate(Arguments args, Fixation fixation) {
+        final List<Argument> specifications = args.getKWArgs();
 
         // start with a single empty result
         List<ValueEvaluationResult> partialResults = Arrays.asList(new ValueEvaluationResult(new PartialObjectValue(), fixation));
 
         // for each attribute definition...
-        for (AttributeSpecification specification : specifications) {
+        for (Argument specification : specifications) {
             final List<ValueEvaluationResult> newPartialResults = new LinkedList<>();
             // iterate over the already created partial results
             for (ValueEvaluationResult partialResult : partialResults) {
@@ -72,7 +79,7 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
     }
 
     @Override
-    public boolean canReduce(VData vData) {
+    public boolean canReduce(Arguments args) {
         return true;
     }
 
@@ -85,7 +92,9 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
      * @param extendableResult The intermediate result that shall be extended by evaluating this specification.
      * @return
      */
-    private List<ValueEvaluationResult> evaluateSpecification(AttributeSpecification specification, ValueEvaluationResult extendableResult) {
+    private List<ValueEvaluationResult> evaluateSpecification(Argument specification, ValueEvaluationResult extendableResult) {
+        assert specification.getPath() != null;
+
         // collect the new partial results
         List<ValueEvaluationResult> partialResults = new LinkedList<>();
 
@@ -97,7 +106,7 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
         partialResults.add(new ValueEvaluationResult(startNewPartialObject, partialFixation));
 
         // first evaluate all the possible target paths. This might specify the fixation further
-        final List<StepNameEvaluationResult> targetPaths = specification.getOutputPath().evaluate(partialFixation);
+        final List<StepNameEvaluationResult> targetPaths = specification.getPath().evaluate(partialFixation);
 
         // Then iterate over the resulting paths - each path should be appended to the input object gaining multiple objects.
         // The objects are copied in case the vData evaluation is ambiguous
@@ -153,13 +162,13 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
     }
 
     /**
-     * @param vData
+     * @param args
      * @param v1    reduced as much as possible
      * @param v2    to add to v1
      * @return
      */
     @Override
-    public PartialObjectValue reduce(VData vData, Value v1, Value v2) {
+    public PartialObjectValue reduce(Arguments args, Value v1, Value v2) {
         assert v1 instanceof PartialObjectValue && v2 instanceof PartialObjectValue;
 
         final PartialObjectValue merge = merge((PartialObjectValue) v1, (PartialObjectValue) v2);
@@ -195,20 +204,19 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
     }
 
     @Override
-    public Value createIdentity(VData vData) {
+    public Value createIdentity(Arguments args) {
         return new PartialObjectValue();
     }
 
     /**
      * Simply copy the data back to a non-partial object.
      *
-     * @param vData The instance of vData, that this reducer is built for
+     * @param args
      * @param value
      * @return
      */
     @Override
-    public Value finalize(VData vData, Value value) {
-        assert vData instanceof ObjectVData;
+    public Value finalize(Arguments args, Value value) {
         assert value instanceof PartialObjectValue;
         final PartialObjectValue partialObjectValue = (PartialObjectValue) value;
 
@@ -270,8 +278,5 @@ public class ObjectVDataEvaluator implements Evaluator, Reducer {
         );
     }
 
-    @Override
-    public List<Class<? extends VData>> getProcessedClasses() {
-        return Arrays.asList(ObjectVData.class, AggregatingObjectVData.class);
-    }
+
 }

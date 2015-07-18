@@ -19,11 +19,14 @@ package notaql.model.vdata;
 import notaql.model.function.Argument;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by thomas on 22.03.15.
  */
-public class GenericFunctionVData implements  VData {
+public class GenericFunctionVData implements VData {
+    private static final long serialVersionUID = 5778491600346079648L;
     private final String name;
     private final List<Argument> args;
 
@@ -38,5 +41,30 @@ public class GenericFunctionVData implements  VData {
 
     public List<Argument> getArgs() {
         return args;
+    }
+
+    @Override
+    public String toString() {
+        return name + '(' + args.stream().map(Argument::toString).collect(Collectors.joining(", ")) + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GenericFunctionVData that = (GenericFunctionVData) o;
+
+        if (args != null ? !args.equals(that.args) : that.args != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (args != null ? args.hashCode() : 0);
+        return result;
     }
 }

@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * This denotes where data ends up in (e.g. OUT.$(IN.a))
+ * This denotes where data ends up in (e.g. OUT.$(IN.a)). This is also used for parameters.
  *
- * TODO: what to do with nested output paths (in an object constructor)
+ * TODO: a renaming would probably be beneficial to also accommodate parameters.
  */
 public class OutputPath implements Serializable {
     private static final long serialVersionUID = -1792131637590592751L;
@@ -66,5 +66,22 @@ public class OutputPath implements Serializable {
     @Override
     public String toString() {
         return "OUT." + pathSteps.stream().map(Object::toString).collect(Collectors.joining("."));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OutputPath that = (OutputPath) o;
+
+        if (!pathSteps.equals(that.pathSteps)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return pathSteps.hashCode();
     }
 }

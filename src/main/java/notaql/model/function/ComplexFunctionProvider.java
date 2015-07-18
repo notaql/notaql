@@ -17,11 +17,11 @@
 package notaql.model.function;
 
 import notaql.engines.Engine;
-import notaql.evaluation.Evaluator;
-import notaql.evaluation.Reducer;
 import notaql.model.NotaQLException;
+import notaql.model.vdata.VData;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -53,15 +53,15 @@ public interface ComplexFunctionProvider {
      * Provides the evaluator for this function
      * @return
      */
-    public Evaluator getEvaluator();
+    public FunctionEvaluator getEvaluator();
 
     /**
      * Provides the reducer for this function
      * @return
      */
-    public Reducer getReducer();
+    public FunctionReducer getReducer();
 
-    public static class Validator {
+    public static class Resolver {
         /**
          * Checks that the following properties:
          * - Values with default values come after the ones without
@@ -75,7 +75,7 @@ public interface ComplexFunctionProvider {
             final List<Parameter> parameters = provider.getParameters();
 
             // make sure that there are no duplicate argument names
-            final Stream<String> distinct = parameters.stream().map(p -> p.getName()).distinct();
+            final Stream<String> distinct = parameters.stream().map(Parameter::getName).distinct();
 
             if(distinct.count() < parameters.size())
                 throw new NotaQLException(
@@ -128,6 +128,91 @@ public interface ComplexFunctionProvider {
                     );
                 }
             }
+        }
+
+        /**
+         * Extracts the arguments for a given function from a given list of plain arguments
+         * @param function
+         * @param plainArgs
+         * @return
+         */
+        public static Arguments extractArgs(ComplexFunctionProvider function, List<Argument> plainArgs) {
+            final List<Argument> args = new LinkedList<>();
+            final List<VData> vargs = new LinkedList<>();
+
+            final List<Parameter> params = function.getParameters();
+
+            // first check that there are no non-named arguments after the first named one
+            boolean named = false;
+            for (Argument plainArg : plainArgs) {
+                if(named && plainArg.getPath() == null)
+                    throw new NotaQLException(
+                            String.format(
+                                    "The function '%1$s' has non-named attributes following named attributes.",
+                                    function.getName()
+                            )
+                    );
+
+                if(plainArg.getPath() != null)
+                    named = true;
+            }
+
+            // extract all non-named arguments first
+            final Iterator<Argument> argIter = plainArgs.iterator();
+            final Iterator<Parameter> paramIter = params.iterator();
+
+            Parameter.ArgumentType stage = Parameter.ArgumentType.NORMAL;
+            Parameter curParam = null;
+            Argument curArg = null;
+
+            argLoop:
+            while(argIter.hasNext() && (paramIter.hasNext() || stage == Parameter.ArgumentType.VAR_ARG)) {
+                curArg = argIter.next();
+
+                if(curArg.getPath() != null)
+                    break;
+
+                if(stage == Parameter.ArgumentType.NORMAL || stage == Parameter.ArgumentType.DEFAULT) {
+                    curParam = paramIter.next();
+                    stage = curParam.getArgType();
+                }
+
+                switch (stage) {
+                    case NORMAL:
+                        args.add(new Argument(curParam.getName(), curArg.getVData()));
+                        break;
+                    case DEFAULT:
+                        args.add(new Argument(curParam.getName(), curArg.getVData()));
+                        break;
+                    case VAR_ARG:
+                        vargs.add(curArg.getVData());
+                        break;
+                    case KEYWORD_ARG:
+                        break argLoop;
+                }
+            }
+
+            // in case there are still non-named attributes left: there are too many
+            // e.g. params: a, b; args: "a", "b", "c"
+            if(argIter.hasNext() && !paramIter.hasNext())
+                throw new NotaQLException(
+                        String.format(
+                                "The function '%1$s' was provided with too many non-named attributes.",
+                                function.getName()
+                        )
+                );
+
+            // extract the named arguments
+            for (Argument arg : plainArgs) {
+                // skip non-named args
+                if(arg.getPath() == null)
+                    continue;
+
+                final VData put;
+                args.add(new Argument(arg.getPath(), arg.getVData()));
+            }
+
+            return new Arguments(args, vargs);
         }
     }
 }
