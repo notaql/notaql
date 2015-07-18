@@ -132,6 +132,7 @@ public class JSONEngineEvaluator implements EngineEvaluator {
 
     }
 
+    /*
     @Override
     public ConstructorVData getConstructor(String name) {
         return null;
@@ -141,4 +142,5 @@ public class JSONEngineEvaluator implements EngineEvaluator {
     public FunctionVData getFunction(String name) {
         return null;
     }
+    */
 }

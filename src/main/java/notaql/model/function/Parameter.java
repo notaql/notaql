@@ -16,6 +16,7 @@
 
 package notaql.model.function;
 
+import notaql.datamodel.NullValue;
 import notaql.datamodel.Value;
 
 /**
@@ -40,6 +41,9 @@ public class Parameter {
     public Parameter(String name, ArgumentType argType) {
         this.name = name;
         this.argType = argType;
+
+        if(argType == ArgumentType.DEFAULT)
+            defaultValue = new NullValue();
     }
 
     public String getName() {

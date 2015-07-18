@@ -211,7 +211,7 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
 
         return conf;
     }
-
+/*
     @Override
     public ConstructorVData getConstructor(String name) {
         return null;
@@ -223,5 +223,6 @@ public class HBaseEngineEvaluator implements EngineEvaluator {
             return new ColCountFunctionVData();
         return null;
     }
+    */
 
 }

@@ -164,7 +164,7 @@ public class RedisEngineEvaluator implements EngineEvaluator {
         jedis.close();
     }
 
-
+/*
     @Override
     public ConstructorVData getConstructor(String name) {
         if(name.equals("HM"))
@@ -178,4 +178,5 @@ public class RedisEngineEvaluator implements EngineEvaluator {
             return new ListCountFunctionVData();
         return null;
     }
+    */
 }

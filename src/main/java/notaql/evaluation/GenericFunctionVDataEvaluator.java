@@ -28,7 +28,6 @@ import java.util.*;
 
 /**
  * This evaluates generic functions.
- * TODO: TESTCASES!
  */
 public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
     private static final long serialVersionUID = 9075850152674486434L;
@@ -84,66 +83,8 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
         }
     }
 
-    /**
-     * Checks that the following properties:
-     * - Values with default values come after the ones without
-     * - Varargs and Keyword arguments are come last (in this order)
-     * This is modelled after the python style of function parameters.
-     */
     private void validateFunctions() {
-        for (Map.Entry<String, ComplexFunctionProvider> complexFunction : functions.entrySet()) {
-            final String name = complexFunction.getKey();
-            final ComplexFunctionProvider provider = complexFunction.getValue();
-
-            boolean foundDefault = false;
-            boolean foundVArgs = false;
-            boolean foundKWArgs = false;
-
-            for (Parameter parameter : provider.getParameters()) {
-                final Parameter.ArgumentType type = parameter.getArgType();
-
-                if(foundKWArgs)
-                    throw new NotaQLException(
-                            String.format("The function '%1$s' has key word arguments that do not come last. It is followed by an argument of type %2$s", name, type)
-                    );
-
-                if(type == Parameter.ArgumentType.KEYWORD_ARG) {
-                    foundKWArgs = true;
-                    continue;
-                }
-
-                // type != Parameter.ArgumentType.KEYWORD_ARG;
-
-                if(foundVArgs) {
-                    throw new NotaQLException(
-                            String.format("The function '%1$s' has varargs that do not come last or immediately before the key word arguments. It is followed by an argument of type %2$s", name, type)
-                    );
-                }
-
-                if(type == Parameter.ArgumentType.VAR_ARG) {
-                    foundVArgs = true;
-                    continue;
-                }
-
-                // type != Parameter.ArgumentType.KEYWORD_ARG && type != Parameter.ArgumentType.VAR_ARG;
-
-                if(type == Parameter.ArgumentType.DEFAULT) {
-                    foundDefault = true;
-                    continue;
-                }
-
-                // type != Parameter.ArgumentType.KEYWORD_ARG && type != Parameter.ArgumentType.VAR_ARG && type != Parameter.ArgumentType.DEFAULT;
-                // => NORMAL
-
-                if(foundDefault) {
-                    throw new NotaQLException(
-                            String.format("The function '%1$s' has non-default argument following default argument.", name)
-                    );
-                }
-
-
-            }
-        }
+        functions.values().stream().forEach(ComplexFunctionProvider.Validator::validate);
     }
 
     @Override
