@@ -19,7 +19,7 @@ package notaql.model.function;
 import notaql.model.vdata.VData;
 
 /**
- * Represents an instance of a parameter (TODO: machen)
+ * Represents an instance of a parameter
  */
 public class Argument {
     private String name = null;

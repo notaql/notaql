@@ -21,39 +21,40 @@ import notaql.datamodel.Value;
 /**
  * Represents a parameter
  */
-public class Parameter<T extends Value> {
+public class Parameter {
     private String name;
-    private Class<T> type;
-    private T defaultValue = null;
-    private boolean isVarArg = false;
+    private Value defaultValue = null;
+    private ArgumentType argType;
 
-    public Parameter(String name,  Class<T> type) {
+    public Parameter(String name) {
         this.name = name;
+        this.argType = ArgumentType.NORMAL;
     }
 
-    public Parameter(String name, Class<T> type, T defaultValue) {
+    public Parameter(String name, Value defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;
+        this.argType = ArgumentType.DEFAULT;
     }
 
-    public Parameter(String name, Class<T> type, boolean isVarArg) {
+    public Parameter(String name, ArgumentType argType) {
         this.name = name;
-        this.isVarArg = isVarArg;
+        this.argType = argType;
     }
 
     public String getName() {
         return name;
     }
 
-    public Class<T> getType() {
-        return type;
-    }
-
-    public T getDefaultValue() {
+    public Value getDefaultValue() {
         return defaultValue;
     }
 
-    public boolean isVarArg() {
-        return isVarArg;
+    public ArgumentType getArgType() {
+        return argType;
+    }
+
+    public static enum ArgumentType {
+        NORMAL, DEFAULT, VAR_ARG, KEYWORD_ARG
     }
 }

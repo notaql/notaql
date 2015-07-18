@@ -33,7 +33,7 @@ import java.util.List;
 public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
     private final String name;
     private final Method method;
-    private List<Parameter<?>> parameters = new LinkedList<>();
+    private List<Parameter> parameters = new LinkedList<>();
 
     public SimpleComplexFunctionProvider(String name, Method method) {
         this.name = name;
@@ -48,7 +48,12 @@ public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
                 throw new NotaQLException("Method " + name + " has invalid argument type");
             }
 
-            parameters.add(new Parameter<>(parameter.getName(), clazz, parameter.isVarArgs()));
+            if(parameter.isVarArgs()) {
+                parameters.add(new Parameter(parameter.getName(), Parameter.ArgumentType.VAR_ARG));
+            } else {
+                parameters.add(new Parameter(parameter.getName()));
+            }
+
         }
     }
 
@@ -58,7 +63,7 @@ public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
     }
 
     @Override
-    public List<Parameter<?>> getParameters() {
+    public List<Parameter> getParameters() {
         return parameters;
     }
 

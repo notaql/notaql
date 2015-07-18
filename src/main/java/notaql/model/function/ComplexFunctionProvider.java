@@ -34,10 +34,10 @@ public interface ComplexFunctionProvider {
 
     /**
      * Provides the parameters that the function accepts.
-     * TODO: Every usage of this function is checked for correctness in terms of parameters (i.e. type checks and number of parameters)
+     * Every usage of this function is checked for correctness in terms of parameters (i.e. number of parameters and order - this is in Python style)
      * @return
      */
-    public List<Parameter<?>> getParameters();
+    public List<Parameter> getParameters();
 
     /**
      * Tells if the function can be used with the given in and out engines
