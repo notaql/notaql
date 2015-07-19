@@ -17,17 +17,9 @@
 package notaql.engines;
 
 import notaql.datamodel.AtomValue;
-import notaql.datamodel.ObjectValue;
-import notaql.model.Transformation;
-import notaql.model.vdata.ConstructorVData;
-import notaql.model.vdata.FunctionVData;
 import notaql.parser.TransformationParser;
-import notaql.parser.path.InputPathParser;
-import notaql.parser.path.OutputPathParser;
-import org.apache.spark.api.java.JavaRDD;
 
 import java.io.Serializable;
-import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 

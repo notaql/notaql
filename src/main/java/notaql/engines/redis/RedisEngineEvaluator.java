@@ -20,27 +20,21 @@ import notaql.NotaQL;
 import notaql.datamodel.*;
 import notaql.engines.Engine;
 import notaql.engines.EngineEvaluator;
-import notaql.engines.mongodb.model.vdata.ListCountFunctionVData;
 import notaql.engines.redis.datamodel.ValueConverter;
-import notaql.engines.redis.model.vdata.HashMapConstructorVData;
 import notaql.engines.redis.parser.path.RedisInputPathParser;
 import notaql.engines.redis.parser.path.RedisOutputPathParser;
 import notaql.evaluation.SparkTransformationEvaluator;
 import notaql.model.EvaluationException;
 import notaql.model.Transformation;
-import notaql.model.vdata.ConstructorVData;
-import notaql.model.vdata.FunctionVData;
 import notaql.parser.TransformationParser;
 import notaql.parser.path.InputPathParser;
 import notaql.parser.path.OutputPathParser;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanResult;
 
 import java.net.ConnectException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -165,13 +159,6 @@ public class RedisEngineEvaluator implements EngineEvaluator {
     }
 
 /*
-    @Override
-    public ConstructorVData getConstructor(String name) {
-        if(name.equals("HM"))
-            return new HashMapConstructorVData();
-        return null;
-    }
-
     @Override
     public FunctionVData getFunction(String name) {
         if(name.equals("LIST_COUNT"))

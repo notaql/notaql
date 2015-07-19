@@ -18,12 +18,9 @@ package notaql.model.function;
 
 import notaql.datamodel.fixation.Fixation;
 import notaql.evaluation.ValueEvaluationResult;
-import notaql.model.vdata.GenericFunctionVData;
-import notaql.model.vdata.VData;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Evaluates a function

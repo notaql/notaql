@@ -14,11 +14,25 @@
  * limitations under the License.
  */
 
-package notaql.model.vdata;
+package notaql.engines.redis.model.function;
+
+import notaql.engines.Engine;
+import notaql.engines.redis.RedisEngine;
+import notaql.model.function.*;
 
 /**
- * Created by thomas on 18.11.14.
+ * Provides a hash map constructor for use in Redis
  */
-public interface FunctionVData extends VData {
-    public void init(VData... vDatas);
+public class HashMapFunction extends ObjectFunction {
+    private static final long serialVersionUID = 547736819640753170L;
+
+    @Override
+    public String getName() {
+        return "HASH_MAP";
+    }
+
+    @Override
+    public boolean isApplicable(Engine inEngine, Engine outEngine) {
+        return outEngine instanceof RedisEngine;
+    }
 }

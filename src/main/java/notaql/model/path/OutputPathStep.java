@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * An output path may consist of multiple steps (TODO: this is not really the case right now)
+ * An output path may consist of multiple steps (TODO: Only this is needed. The OutputPath is only necessary in the parser -> rename this and make Arguments just take this as a name)
  * This is the base interface for such a step.
  */
 public interface OutputPathStep extends Serializable {

@@ -15,7 +15,6 @@
 #
 
 notaql.evaluation.CountVDataEvaluator
-notaql.evaluation.ObjectFunctionEvaluator
 notaql.evaluation.SumVDataEvaluator
 notaql.evaluation.AtomVDataEvaluator
 notaql.evaluation.ImplodeVDataEvaluator
@@ -26,6 +25,7 @@ notaql.evaluation.BracedVDataEvaluator
 notaql.evaluation.AvgVDataEvaluator
 notaql.evaluation.ExtremumVDataEvaluator
 notaql.evaluation.GenericFunctionVDataEvaluator
+notaql.evaluation.InternalObjectVDataEvaluator
 
 notaql.engines.hbase.evaluation.ColCountFunctionVDataEvaluator
 

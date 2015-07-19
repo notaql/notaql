@@ -28,8 +28,6 @@ import notaql.engines.json.path.JSONOutputPathParser;
 import notaql.evaluation.SparkTransformationEvaluator;
 import notaql.model.EvaluationException;
 import notaql.model.Transformation;
-import notaql.model.vdata.ConstructorVData;
-import notaql.model.vdata.FunctionVData;
 import notaql.parser.TransformationParser;
 import notaql.parser.path.InputPathParser;
 import notaql.parser.path.OutputPathParser;

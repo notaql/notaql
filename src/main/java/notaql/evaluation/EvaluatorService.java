@@ -124,7 +124,7 @@ public class EvaluatorService implements Evaluator, Reducer {
         final Reducer reducer = getReducer(vData);
 
         if(reducer == null)
-            throw new EvaluationException("VData type has no reducer at the moment: " + vData.toString());
+            throw new EvaluationException("VData type has no reducer at the moment: " + vData.getClass() + ": " + vData.toString());
 
         return reducer.createIdentity(vData);
     }

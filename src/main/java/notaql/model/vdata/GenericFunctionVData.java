@@ -23,7 +23,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
- * Created by thomas on 22.03.15.
+ * Represents any function (e.g. OBJECT, LIST, COL_COUNT, ...)
  */
 public class GenericFunctionVData implements VData {
     private static final long serialVersionUID = 5778491600346079648L;

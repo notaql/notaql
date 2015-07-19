@@ -17,9 +17,9 @@
 package notaql.parser;
 
 import notaql.datamodel.Step;
-import notaql.model.AttributeSpecification;
 import notaql.model.NotaQLExpression;
 import notaql.model.Transformation;
+import notaql.model.function.Argument;
 import notaql.model.path.IdStep;
 import notaql.model.path.InputPath;
 import notaql.model.path.OutputPath;
@@ -45,7 +45,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -69,7 +69,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -95,7 +95,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -121,7 +121,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -147,7 +147,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -173,7 +173,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )
@@ -199,7 +199,7 @@ public class NotaQLExpressionParserTest {
                                         null,
                                         parse.getTransformations().get(0).getInEngineEvaluator(),
                                         parse.getTransformations().get(0).getOutEngineEvaluator(),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(new IdStep<>(new Step<>("_id"))),
                                                 new InputVData(new InputPath(new IdStep<>(new Step<>("_id"))))
                                         )

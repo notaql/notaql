@@ -31,6 +31,7 @@ import java.util.List;
  * Provides the complex function interface for simple functions for uniform handling in the GenericFunctionVDataEvaluator
  */
 public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
+    private static final long serialVersionUID = 2071933072269808521L;
     private final String name;
     private final Method method;
     private List<Parameter> parameters = new LinkedList<>();

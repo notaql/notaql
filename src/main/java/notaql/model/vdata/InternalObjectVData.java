@@ -16,48 +16,38 @@
 
 package notaql.model.vdata;
 
-import notaql.model.AttributeSpecification;
+import notaql.model.function.Argument;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
+/**
+ * Internal OBJECT() function allowing nicer construction. This is just used for internal purposes.
+ */
+public class InternalObjectVData implements VData {
+    private static final long serialVersionUID = -2544526318060714727L;
+    private final List<Argument> specifications;
 
-public class ObjectVData implements ConstructorVData {
-    private static final long serialVersionUID = 1326445906026136294L;
-    private List<AttributeSpecification> specifications;
-
-    private final static Logger logger = Logger.getLogger(ObjectVData.class.getName());
-
-    public ObjectVData() {
-
+    public InternalObjectVData() {
+        specifications = new LinkedList<>();
     }
 
-    public ObjectVData(List<AttributeSpecification> specifications) {
+    public InternalObjectVData(List<Argument> specifications) {
         this.specifications = specifications;
     }
 
-    public ObjectVData(AttributeSpecification... specifications) {
-        init(specifications);
+    public InternalObjectVData(Argument... specifications) {
+        this(Arrays.asList(specifications));
     }
 
-    @Override
-    public void init(AttributeSpecification... specifications) {
-        this.specifications = Arrays.asList(specifications);
-    }
-
-    public List<AttributeSpecification> getSpecifications() {
-        return this.specifications;
+    public List<Argument> getSpecifications() {
+        return specifications;
     }
 
     @Override
     public String toString() {
-        final String join = specifications
-                .stream()
-                .map(s -> s.getOutputPath().toString() + "<-" + s.getVData().toString())
-                .collect(Collectors.joining(",\n"));
-        return "OBJECT(\n" + join + "\n)";
+        return "INTERNAL_OBJECT(" + specifications + ')';
     }
 
     @Override
@@ -65,7 +55,7 @@ public class ObjectVData implements ConstructorVData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ObjectVData that = (ObjectVData) o;
+        InternalObjectVData that = (InternalObjectVData) o;
 
         if (specifications != null ? !specifications.equals(that.specifications) : that.specifications != null)
             return false;

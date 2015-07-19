@@ -20,14 +20,14 @@ import notaql.engines.Engine;
 import notaql.model.NotaQLException;
 import notaql.model.vdata.VData;
 
+import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Provides complex functions which may deeply influence the evaluation process.
  */
-public interface ComplexFunctionProvider {
+public interface ComplexFunctionProvider extends Serializable {
     /**
      * Provides the function name (used in the NotaQL transformations)
      * @return

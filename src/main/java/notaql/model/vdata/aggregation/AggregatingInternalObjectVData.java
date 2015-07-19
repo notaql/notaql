@@ -16,31 +16,32 @@
 
 package notaql.model.vdata.aggregation;
 
-import notaql.model.AttributeSpecification;
-import notaql.model.vdata.ObjectVData;
+import notaql.model.function.Argument;
+import notaql.model.vdata.InternalObjectVData;
 
 import java.util.*;
 
 /**
- * This aggregates objects together
+ * This is used internally in the TransformationParser in order to translate multi-step paths.
+ * This simply marks an object as an aggregating helper object.
  */
-public class AggregatingObjectVData extends ObjectVData implements AggregatingVData {
+public class AggregatingInternalObjectVData extends InternalObjectVData implements AggregatingVData {
     private static final long serialVersionUID = 4560922144152759454L;
 
-    public AggregatingObjectVData() {
+    public AggregatingInternalObjectVData() {
     }
 
-    public AggregatingObjectVData(List<AttributeSpecification> specifications) {
+    public AggregatingInternalObjectVData(List<Argument> specifications) {
         super(specifications);
     }
 
-    public AggregatingObjectVData(AttributeSpecification... specifications) {
+    public AggregatingInternalObjectVData(Argument... specifications) {
         super(specifications);
     }
 
     @Override
     public String toString() {
-        return "AGGREGATING-" + super.toString();
+        return "AGGREGATING_" + super.toString();
     }
 
 }

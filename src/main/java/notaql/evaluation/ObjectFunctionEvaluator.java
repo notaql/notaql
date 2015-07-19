@@ -20,7 +20,6 @@ import notaql.datamodel.ObjectValue;
 import notaql.datamodel.Step;
 import notaql.datamodel.Value;
 import notaql.datamodel.fixation.Fixation;
-import notaql.model.AttributeSpecification;
 import notaql.model.EvaluationException;
 import notaql.model.function.Argument;
 import notaql.model.function.Arguments;
@@ -28,18 +27,14 @@ import notaql.model.function.FunctionEvaluator;
 import notaql.model.function.FunctionReducer;
 import notaql.model.path.IgnoredIdStep;
 import notaql.model.path.StepNameEvaluationResult;
-import notaql.model.vdata.GenericFunctionVData;
-import notaql.model.vdata.ObjectVData;
 import notaql.evaluation.values.PartialObjectValue;
 import notaql.model.vdata.VData;
 import notaql.evaluation.values.KeyGroupValue;
-import notaql.model.vdata.aggregation.AggregatingObjectVData;
 import scala.Tuple2;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This is the most complex evaluator in the whole project.

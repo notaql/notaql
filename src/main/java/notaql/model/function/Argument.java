@@ -21,10 +21,13 @@ import notaql.model.path.IdStep;
 import notaql.model.path.OutputPath;
 import notaql.model.vdata.VData;
 
+import java.io.Serializable;
+
 /**
  * Represents an instance of a parameter
  */
-public class Argument {
+public class Argument implements Serializable {
+    private static final long serialVersionUID = -4613254486825466251L;
     private OutputPath path = null;
     private VData vData;
 

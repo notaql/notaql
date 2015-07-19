@@ -26,12 +26,12 @@ import java.util.List;
 /**
  * Created by thomas on 7/18/15.
  */
-public class ObjectFunction implements ComplexFunctionProvider {
-    private static final long serialVersionUID = -7625988146800633603L;
+public class AggregatingObjectFunction implements ComplexFunctionProvider {
+    private static final long serialVersionUID = 7722343296633932070L;
 
     @Override
     public String getName() {
-        return "OBJECT";
+        return "AGGREGATING_OBJECT";
     }
 
     @Override

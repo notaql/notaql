@@ -16,15 +16,19 @@
 
 package notaql.model.function;
 
+import notaql.model.path.IdStep;
 import notaql.model.vdata.VData;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by thomas on 7/18/15.
  */
-public class Arguments {
+public class Arguments implements Serializable {
+    private static final long serialVersionUID = 3297507255859696672L;
     private List<Argument> kwargs;
     private List<VData> vargs;
 
@@ -44,6 +48,22 @@ public class Arguments {
 
     public List<VData> getVArgs() {
         return vargs;
+    }
+
+    /**
+     * Provides a constant-keyword argument for with the given key or null if not found.
+     * @param key
+     * @return
+     */
+    public Argument getFromConstantKWArgs(String key) {
+        final Optional<Argument> arg = kwargs.stream()
+                .filter(
+                        a -> a.getPath().getPathSteps().get(0) instanceof IdStep &&
+                                ((IdStep) a.getPath().getPathSteps().get(0)).getId().getStep().equals(key)
+                )
+                .findAny();
+
+        return arg.get();
     }
 
     @Override

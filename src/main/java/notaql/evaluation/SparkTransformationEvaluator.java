@@ -60,18 +60,18 @@ public class SparkTransformationEvaluator implements Serializable {
         // map
         final JavaRDD<ValueEvaluationResult> evaluated = values
                 .flatMap(v -> EvaluatorService.getInstance()
-                        .evaluate(transformation.getExpression(), new Fixation((ObjectValue) v)));
+                        .evaluate(transformation.getObject(), new Fixation((ObjectValue) v)));
 
         // Aggregate - recursively go down the tree described by the transformation
         final JavaPairRDD<String, Value> reduced = evaluated.mapToPair(r -> new Tuple2<>(r.getValue().groupKey(), r.getValue()))
                 .aggregateByKey(
-                        EvaluatorService.getInstance().createIdentity(transformation.getExpression()),
-                        (a, b) -> EvaluatorService.getInstance().reduce(transformation.getExpression(), a, b),
-                        (a, b) -> EvaluatorService.getInstance().reduce(transformation.getExpression(), a, b)
+                        EvaluatorService.getInstance().createIdentity(transformation.getObject()),
+                        (a, b) -> EvaluatorService.getInstance().reduce(transformation.getObject(), a, b),
+                        (a, b) -> EvaluatorService.getInstance().reduce(transformation.getObject(), a, b)
                 );
 
         // finalize all values
-        return reduced.map(t -> (ObjectValue) EvaluatorService.getInstance().finalize(transformation.getExpression(), t._2));
+        return reduced.map(t -> (ObjectValue) EvaluatorService.getInstance().finalize(transformation.getObject(), t._2));
     }
 
     /**

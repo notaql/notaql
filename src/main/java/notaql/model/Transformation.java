@@ -18,22 +18,21 @@ package notaql.model;
 
 import notaql.datamodel.*;
 import notaql.datamodel.fixation.Fixation;
-import notaql.engines.Engine;
 import notaql.engines.EngineEvaluator;
 import notaql.evaluation.ValueEvaluationResult;
+import notaql.model.function.Argument;
 import notaql.model.predicate.Predicate;
-import notaql.model.vdata.ObjectVData;
-import notaql.model.vdata.aggregation.ListVData;
+import notaql.model.vdata.InternalObjectVData;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by thomas on 17.11.14.
+ * Represents a complete NotaQL transformation.
  */
-public class Transformation extends ListVData {
+public class Transformation {
     private static final long serialVersionUID = 875340950573567153L;
-    private ObjectVData objectVData;
+    private InternalObjectVData object;
 
     private Predicate inPredicate;
     private Predicate outPredicate;
@@ -41,22 +40,20 @@ public class Transformation extends ListVData {
     private transient EngineEvaluator inEngineEvaluator;
     private transient EngineEvaluator outEngineEvaluator;
 
-    public Transformation(Predicate inPredicate, Predicate outPredicate, EngineEvaluator inEngineEvaluator, EngineEvaluator outEngineEvaluator, List<AttributeSpecification> specifications) {
-        super(new ObjectVData(specifications));
-        objectVData = (ObjectVData)super.getExpression();
+    public Transformation(Predicate inPredicate, Predicate outPredicate, EngineEvaluator inEngineEvaluator, EngineEvaluator outEngineEvaluator, List<Argument> specifications) {
+        object = new InternalObjectVData(specifications);
         this.inPredicate = inPredicate;
         this.outPredicate = outPredicate;
         this.inEngineEvaluator = inEngineEvaluator;
         this.outEngineEvaluator = outEngineEvaluator;
     }
 
-    public Transformation(Predicate inPredicate, Predicate outPredicate, EngineEvaluator inEngineEvaluator, EngineEvaluator outEngineEvaluator, AttributeSpecification... specifications) {
+    public Transformation(Predicate inPredicate, Predicate outPredicate, EngineEvaluator inEngineEvaluator, EngineEvaluator outEngineEvaluator, Argument... specifications) {
         this(inPredicate, outPredicate, inEngineEvaluator, outEngineEvaluator, Arrays.asList(specifications));
     }
 
-    @Override
-    public ObjectVData getExpression() {
-        return (ObjectVData)super.getExpression();
+    public InternalObjectVData getObject() {
+        return object;
     }
 
     public Predicate getInPredicate() {
@@ -97,6 +94,6 @@ public class Transformation extends ListVData {
                 "OUT-ENGINE:" + outEngineEvaluator.toString() + ",\n" +
                 (inPredicate!=null?"IN-FILTER: " + inPredicate.toString() + ",\n":"") +
                 (outPredicate!=null?"OUT-FILTER: " + outPredicate.toString() + ",\n":"") +
-                objectVData.toString();
+                object.toString();
     }
 }

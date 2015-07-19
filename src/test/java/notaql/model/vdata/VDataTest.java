@@ -19,6 +19,7 @@ package notaql.model.vdata;
 import notaql.datamodel.*;
 import notaql.datamodel.fixation.Fixation;
 import notaql.model.AttributeSpecification;
+import notaql.model.function.Argument;
 import notaql.model.path.*;
 import notaql.model.vdata.aggregation.CountVData;
 import notaql.model.vdata.aggregation.ListVData;
@@ -50,8 +51,8 @@ public class VDataTest {
      */
     @Test
     public void testEvaluate_identity() throws Exception {
-        final ObjectVData object = new ObjectVData(
-                new AttributeSpecification(
+        final InternalObjectVData object = new InternalObjectVData(
+                new Argument(
                         new OutputPath(
                                 new IdStep<>(new Step<>("_id"))
                         ),
@@ -60,7 +61,7 @@ public class VDataTest {
                                 new IdStep<>(new Step<>("_id"))
                         ))
                 ),
-                new AttributeSpecification(
+                new Argument(
                         new OutputPath(
                                 new ResolvedIdStep(
                                         new InputPath(
@@ -102,20 +103,20 @@ public class VDataTest {
      */
     @Test
     public void testEvaluate_nestedGrouping() throws Exception {
-        final ObjectVData object = new ObjectVData(
-                new AttributeSpecification(
+        final InternalObjectVData object = new InternalObjectVData(
+                new Argument(
                         new OutputPath(
                                 new IdStep<>(new Step<>("_id"))
                         ),
                         new AtomVData(new StringValue("all"))
                 ),
-                new AttributeSpecification(
+                new Argument(
                         new OutputPath(
                                 new IdStep<>(new Step<>("terms"))
                         ),
                         new ListVData(
-                                new ObjectVData(
-                                        new AttributeSpecification(
+                                new InternalObjectVData(
+                                        new Argument(
                                                 new OutputPath(
                                                         new IdStep<>(new Step<>("term"))
                                                 ),
@@ -128,19 +129,19 @@ public class VDataTest {
                                                                 )
                                                 )
                                         ),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(
                                                         new IdStep<>(new Step<>("count"))
                                                 ),
                                                 new CountVData()
                                         ),
-                                        new AttributeSpecification(
+                                        new Argument(
                                                 new OutputPath(
                                                         new IdStep<>(new Step<>("songs"))
                                                 ),
                                                 new ListVData(
-                                                        new ObjectVData(
-                                                                new AttributeSpecification(
+                                                        new InternalObjectVData(
+                                                                new Argument(
                                                                         new OutputPath(
                                                                                 new IdStep<>(new Step<>("song"))
                                                                         ),
@@ -152,7 +153,7 @@ public class VDataTest {
                                                                                 )
                                                                         )
                                                                 ),
-                                                                new AttributeSpecification(
+                                                                new Argument(
                                                                         new OutputPath(
                                                                                 new IdStep<>(new Step<>("band"))
                                                                         ),
@@ -163,7 +164,7 @@ public class VDataTest {
                                                                                 )
                                                                         )
                                                                 ),
-                                                                new AttributeSpecification(
+                                                                new Argument(
                                                                         new OutputPath(
                                                                                 new IdStep<>(new Step<>("count"))
                                                                         ),
@@ -191,8 +192,8 @@ public class VDataTest {
      */
     @Test
     public void testEvaluate_nestedArithmetics() throws Exception {
-        final ObjectVData object = new ObjectVData(
-                new AttributeSpecification(
+        final InternalObjectVData object = new InternalObjectVData(
+                new Argument(
                         new OutputPath(
                                 new IdStep<>(new Step<>("_id"))
                         ),
@@ -201,7 +202,7 @@ public class VDataTest {
                                 new IdStep<>(new Step<>("_id"))
                         ))
                 ),
-                new AttributeSpecification(
+                new Argument(
                         new OutputPath(
                                 new IdStep<>(new Step<>("weightedSum"))
                         ),
