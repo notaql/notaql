@@ -17,7 +17,6 @@
 package notaql.model.function;
 
 import notaql.engines.Engine;
-import notaql.engines.mongodb.MongoDBEngine;
 import notaql.evaluation.ObjectFunctionEvaluator;
 
 import java.util.Arrays;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by thomas on 7/18/15.
  */
-public class AggregatingObjectFunction implements ComplexFunctionProvider {
+public class AggregatingObjectFunction implements FunctionProvider {
     private static final long serialVersionUID = 7722343296633932070L;
 
     @Override

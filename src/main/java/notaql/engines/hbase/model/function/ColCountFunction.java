@@ -33,7 +33,7 @@ import java.util.Optional;
 /**
  * Provides the number of columns in a row - or for a certain column family in a row
  */
-public class ColCountFunction implements ComplexFunctionProvider {
+public class ColCountFunction implements FunctionProvider {
 
     @Override
     public String getName() {

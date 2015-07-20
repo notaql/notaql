@@ -19,6 +19,7 @@ package notaql.model.function;
 import notaql.datamodel.Step;
 import notaql.model.path.IdStep;
 import notaql.model.path.OutputPath;
+import notaql.model.path.OutputPathStep;
 import notaql.model.vdata.VData;
 
 import java.io.Serializable;
@@ -26,27 +27,27 @@ import java.io.Serializable;
 /**
  * Represents an instance of a parameter
  */
-public class Argument implements Serializable {
+public class Argument<T extends OutputPathStep> implements Serializable {
     private static final long serialVersionUID = -4613254486825466251L;
-    private OutputPath path = null;
+    private OutputPathStep name = null;
     private VData vData;
 
     public Argument(VData vData) {
         this.vData = vData;
     }
 
-    public Argument(OutputPath path, VData vData) {
-        this.path = path;
+    public Argument(OutputPathStep name, VData vData) {
+        this.name = name;
         this.vData = vData;
     }
 
     public Argument(String name, VData vData) {
-        this.path = new OutputPath(new IdStep<>(new Step<>(name)));
+        this.name = new IdStep<>(new Step<>(name));
         this.vData = vData;
     }
 
-    public OutputPath getPath() {
-        return path;
+    public OutputPathStep getName() {
+        return name;
     }
 
     public VData getVData() {
@@ -55,7 +56,7 @@ public class Argument implements Serializable {
 
     @Override
     public String toString() {
-        return path + " <- " + vData;
+        return name + " <- " + vData;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class Argument implements Serializable {
 
         Argument argument = (Argument) o;
 
-        if (path != null ? !path.equals(argument.path) : argument.path != null) return false;
+        if (name != null ? !name.equals(argument.name) : argument.name != null) return false;
         if (vData != null ? !vData.equals(argument.vData) : argument.vData != null) return false;
 
         return true;
@@ -73,7 +74,7 @@ public class Argument implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = path != null ? path.hashCode() : 0;
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (vData != null ? vData.hashCode() : 0);
         return result;
     }

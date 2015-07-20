@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Provides the number of columns in a row
  */
-public class ColCountFunction implements ComplexFunctionProvider {
+public class ColCountFunction implements FunctionProvider {
 
     @Override
     public String getName() {

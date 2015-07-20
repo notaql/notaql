@@ -25,7 +25,6 @@ import notaql.model.vdata.VData;
 
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This evaluates generic functions.
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
     private static final long serialVersionUID = 9075850152674486434L;
 
-    private Map<String, ComplexFunctionProvider> functions = new HashMap<>();
+    private Map<String, FunctionProvider> functions = new HashMap<>();
 
     /**
      * Grabs all functions that are available
@@ -55,9 +54,9 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
                 if(annotation == null)
                     continue;
 
-                final ComplexFunctionProvider prev = functions.put(
+                final FunctionProvider prev = functions.put(
                         annotation.name(),
-                        new SimpleComplexFunctionProvider(annotation.name(), method)
+                        new SimpleFunctionProviderWrapper(annotation.name(), method)
                 );
 
                 // check if there was a name clash
@@ -70,11 +69,11 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
     }
 
     private void loadComplexFunctions() {
-        final ServiceLoader<ComplexFunctionProvider> functionProviderLoader = ServiceLoader.load(ComplexFunctionProvider.class);
+        final ServiceLoader<FunctionProvider> functionProviderLoader = ServiceLoader.load(FunctionProvider.class);
 
         // extract all complex functions from the classes
-        for (ComplexFunctionProvider complexFunctionProvider : functionProviderLoader) {
-            final ComplexFunctionProvider prev = functions.put(complexFunctionProvider.getName(), complexFunctionProvider);
+        for (FunctionProvider functionProvider : functionProviderLoader) {
+            final FunctionProvider prev = functions.put(functionProvider.getName(), functionProvider);
 
             // check if there was a name clash
             if(prev != null)
@@ -85,7 +84,7 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
     }
 
     private void validateFunctions() {
-        functions.values().stream().forEach(ComplexFunctionProvider.Resolver::validate);
+        functions.values().stream().forEach(FunctionProvider.Resolver::validate);
     }
 
     @Override
@@ -94,10 +93,10 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
         final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
 
-        final ComplexFunctionProvider provider = getProvider(functionVData);
+        final FunctionProvider provider = getProvider(functionVData);
 
         return provider.getEvaluator().evaluate(
-                ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
+                FunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
                 fixation
         );
     }
@@ -108,10 +107,10 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
         final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
 
-        final ComplexFunctionProvider provider = getProvider(functionVData);
+        final FunctionProvider provider = getProvider(functionVData);
 
         return provider.getEvaluator()
-                .canReduce(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
+                .canReduce(FunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
     }
 
     @Override
@@ -125,13 +124,13 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
         final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
 
-        final ComplexFunctionProvider provider = getProvider(functionVData);
+        final FunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
         return provider.getReducer()
                 .reduce(
-                        ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
+                        FunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()),
                         v1,
                         v2
                 );
@@ -143,12 +142,12 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
         final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
 
-        final ComplexFunctionProvider provider = getProvider(functionVData);
+        final FunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
         return provider.getReducer()
-                .createIdentity(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
+                .createIdentity(FunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()));
     }
 
     @Override
@@ -157,14 +156,14 @@ public class GenericFunctionVDataEvaluator implements Evaluator, Reducer {
 
         final GenericFunctionVData functionVData = (GenericFunctionVData) vData;
 
-        final ComplexFunctionProvider provider = getProvider(functionVData);
+        final FunctionProvider provider = getProvider(functionVData);
 
         assert provider.getReducer() != null;
 
-        return provider.getReducer().finalize(ComplexFunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()), value);
+        return provider.getReducer().finalize(FunctionProvider.Resolver.extractArgs(provider, functionVData.getArgs()), value);
     }
 
-    private ComplexFunctionProvider getProvider(GenericFunctionVData vData) {
+    private FunctionProvider getProvider(GenericFunctionVData vData) {
         return functions.get(vData.getName());
     }
 

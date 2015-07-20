@@ -17,6 +17,7 @@
 package notaql.model.function;
 
 import notaql.model.path.IdStep;
+import notaql.model.path.OutputPathStep;
 import notaql.model.vdata.VData;
 
 import java.io.Serializable;
@@ -27,22 +28,22 @@ import java.util.Optional;
 /**
  * Created by thomas on 7/18/15.
  */
-public class Arguments implements Serializable {
+public class Arguments<T extends OutputPathStep> implements Serializable {
     private static final long serialVersionUID = 3297507255859696672L;
-    private List<Argument> kwargs;
+    private List<Argument<T>> kwargs;
     private List<VData> vargs;
 
-    public Arguments(List<Argument> kwargs, List<VData> vargs) {
+    public Arguments(List<Argument<T>> kwargs, List<VData> vargs) {
         this.kwargs = kwargs;
         this.vargs = vargs;
     }
 
-    public Arguments(List<Argument> kwargs) {
+    public Arguments(List<Argument<T>> kwargs) {
         this.kwargs = kwargs;
         this.vargs = new LinkedList<>();
     }
 
-    public List<Argument> getKWArgs() {
+    public List<Argument<T>> getKWArgs() {
         return kwargs;
     }
 
@@ -55,11 +56,11 @@ public class Arguments implements Serializable {
      * @param key
      * @return
      */
-    public Argument getFromConstantKWArgs(String key) {
-        final Optional<Argument> arg = kwargs.stream()
+    public Argument<T> getFromConstantKWArgs(String key) {
+        final Optional<Argument<T>> arg = kwargs.stream()
                 .filter(
-                        a -> a.getPath().getPathSteps().get(0) instanceof IdStep &&
-                                ((IdStep) a.getPath().getPathSteps().get(0)).getId().getStep().equals(key)
+                        a -> a.getName() instanceof IdStep &&
+                                ((IdStep) a.getName()).getId().getStep().equals(key)
                 )
                 .findAny();
 

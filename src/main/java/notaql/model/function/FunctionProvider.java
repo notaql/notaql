@@ -18,6 +18,7 @@ package notaql.model.function;
 
 import notaql.engines.Engine;
 import notaql.model.NotaQLException;
+import notaql.model.path.OutputPathStep;
 import notaql.model.vdata.VData;
 
 import java.io.Serializable;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * Provides complex functions which may deeply influence the evaluation process.
  */
-public interface ComplexFunctionProvider extends Serializable {
+public interface FunctionProvider<T extends OutputPathStep> extends Serializable {
     /**
      * Provides the function name (used in the NotaQL transformations)
      * @return
@@ -53,13 +54,13 @@ public interface ComplexFunctionProvider extends Serializable {
      * Provides the evaluator for this function
      * @return
      */
-    public FunctionEvaluator getEvaluator();
+    public FunctionEvaluator<T> getEvaluator();
 
     /**
      * Provides the reducer for this function
      * @return
      */
-    public FunctionReducer getReducer();
+    public FunctionReducer<T> getReducer();
 
     public static class Resolver {
         /**
@@ -70,7 +71,7 @@ public interface ComplexFunctionProvider extends Serializable {
          * This is modelled after the python style of function parameters.
          * @param provider
          */
-        public static void validate(ComplexFunctionProvider provider) {
+        public static void validate(FunctionProvider provider) {
             final String name = provider.getName();
             final List<Parameter> parameters = provider.getParameters();
 
@@ -136,7 +137,7 @@ public interface ComplexFunctionProvider extends Serializable {
          * @param plainArgs
          * @return
          */
-        public static Arguments extractArgs(ComplexFunctionProvider function, List<Argument> plainArgs) {
+        public static Arguments extractArgs(FunctionProvider function, List<Argument> plainArgs) {
             final List<Argument> args = new LinkedList<>();
             final List<VData> vargs = new LinkedList<>();
 

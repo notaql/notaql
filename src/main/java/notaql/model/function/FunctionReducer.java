@@ -17,13 +17,14 @@
 package notaql.model.function;
 
 import notaql.datamodel.Value;
+import notaql.model.path.OutputPathStep;
 
 import java.io.Serializable;
 
 /**
  * This reducer defines how (partial) values which were created by the evaluation step are combined (reduced).
  */
-public interface FunctionReducer extends Serializable {
+public interface FunctionReducer<T extends OutputPathStep> extends Serializable {
     /**
      * This combines two (partial) values from the evaluation step (i.e. map)
      *
@@ -33,14 +34,14 @@ public interface FunctionReducer extends Serializable {
      * @param v2
      * @return
      */
-    public Value reduce(Arguments args, Value v1, Value v2);
+    public Value reduce(Arguments<T> args, Value v1, Value v2);
 
     /**
      * This is the neutral element, with which the reduction chain is started.
      * @param args
      * @return
      */
-    public Value createIdentity(Arguments args);
+    public Value createIdentity(Arguments<T> args);
 
     /**
      * This is executed after the reduction step is done.
@@ -49,5 +50,5 @@ public interface FunctionReducer extends Serializable {
      * @param value
      * @return
      */
-    public Value finalize(Arguments args, Value value);
+    public Value finalize(Arguments<T> args, Value value);
 }

@@ -18,8 +18,6 @@ package notaql.model.function;
 
 import notaql.datamodel.Value;
 import notaql.engines.Engine;
-import notaql.evaluation.Evaluator;
-import notaql.evaluation.Reducer;
 import notaql.evaluation.SimpleFunctionVDataEvaluator;
 import notaql.model.NotaQLException;
 
@@ -30,13 +28,13 @@ import java.util.List;
 /**
  * Provides the complex function interface for simple functions for uniform handling in the GenericFunctionVDataEvaluator
  */
-public class SimpleComplexFunctionProvider implements  ComplexFunctionProvider {
+public class SimpleFunctionProviderWrapper implements FunctionProvider {
     private static final long serialVersionUID = 2071933072269808521L;
     private final String name;
     private final Method method;
     private List<Parameter> parameters = new LinkedList<>();
 
-    public SimpleComplexFunctionProvider(String name, Method method) {
+    public SimpleFunctionProviderWrapper(String name, Method method) {
         this.name = name;
         this.method = method;
 

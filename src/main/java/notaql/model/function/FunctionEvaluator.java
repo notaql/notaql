@@ -18,6 +18,7 @@ package notaql.model.function;
 
 import notaql.datamodel.fixation.Fixation;
 import notaql.evaluation.ValueEvaluationResult;
+import notaql.model.path.OutputPathStep;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Evaluates a function
  */
-public interface FunctionEvaluator extends Serializable {
+public interface FunctionEvaluator<T extends OutputPathStep> extends Serializable {
     /**
      * This can be though of as a sort of (flat-)map function, that is executed for each fixation.
      *
@@ -35,7 +36,7 @@ public interface FunctionEvaluator extends Serializable {
      * @param fixation
      * @return
      */
-    public List<ValueEvaluationResult> evaluate(Arguments args, Fixation fixation);
+    public List<ValueEvaluationResult> evaluate(Arguments<T> args, Fixation fixation);
 
     /**
      * Provides info if this evaluator also features a Reducer
@@ -43,5 +44,5 @@ public interface FunctionEvaluator extends Serializable {
      * @param args
      * @return
      */
-    public boolean canReduce(Arguments args);
+    public boolean canReduce(Arguments<T> args);
 }

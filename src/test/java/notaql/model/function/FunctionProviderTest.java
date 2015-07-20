@@ -20,8 +20,6 @@ import notaql.datamodel.NullValue;
 import notaql.datamodel.Step;
 import notaql.datamodel.StringValue;
 import notaql.engines.Engine;
-import notaql.evaluation.Evaluator;
-import notaql.evaluation.Reducer;
 import notaql.model.NotaQLException;
 import notaql.model.path.IdStep;
 import notaql.model.path.OutputPath;
@@ -33,7 +31,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ComplexFunctionProviderTest {
+public class FunctionProviderTest {
     @Test
     public void testTrickDefault() {
         final Parameter parameter = new Parameter("a", Parameter.ArgumentType.DEFAULT);
@@ -48,7 +46,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a"), new Parameter("b"));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -59,7 +57,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a", new NullValue()), new Parameter("b", new NullValue()));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -70,7 +68,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a", Parameter.ArgumentType.VAR_ARG));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -81,7 +79,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a", Parameter.ArgumentType.KEYWORD_ARG));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -92,7 +90,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a"), new Parameter("b", new NullValue()));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -108,7 +106,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -119,7 +117,7 @@ public class ComplexFunctionProviderTest {
                 return Arrays.asList(new Parameter("a"), new Parameter("a"));
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -133,7 +131,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -147,7 +145,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -161,7 +159,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -175,7 +173,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -189,7 +187,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -203,7 +201,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -217,7 +215,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test(expected = NotaQLException.class)
@@ -231,7 +229,7 @@ public class ComplexFunctionProviderTest {
                 );
             }
         };
-        ComplexFunctionProvider.Resolver.validate(provider);
+        FunctionProvider.Resolver.validate(provider);
     }
 
     @Test
@@ -245,7 +243,7 @@ public class ComplexFunctionProviderTest {
             }
         };
 
-        final Arguments args = ComplexFunctionProvider.Resolver
+        final Arguments args = FunctionProvider.Resolver
                 .extractArgs(
                         provider,
                         Arrays.asList(
@@ -270,7 +268,7 @@ public class ComplexFunctionProviderTest {
             }
         };
 
-        final Arguments args = ComplexFunctionProvider.Resolver
+        final Arguments args = FunctionProvider.Resolver
                 .extractArgs(
                         provider,
                         Arrays.asList(
@@ -295,7 +293,7 @@ public class ComplexFunctionProviderTest {
             }
         };
 
-        final Arguments args = ComplexFunctionProvider.Resolver
+        final Arguments args = FunctionProvider.Resolver
                 .extractArgs(
                         provider,
                         new LinkedList<>()
@@ -307,7 +305,7 @@ public class ComplexFunctionProviderTest {
         )));
     }
 
-    public static abstract class TestFunctionProvider implements ComplexFunctionProvider {
+    public static abstract class TestFunctionProvider implements FunctionProvider {
         @Override
         public String getName() {
             return "TEST";
